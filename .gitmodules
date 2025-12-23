@@ -1,3 +1,9 @@
 [submodule "LoveIt"]
 	path = LoveIt
-	url = https://github.com/dillonzq/LoveIt
+	url = https://github.com/dillonzq/LoveIt.git
+[submodule "my-personal-blog/themes/LoveIt"]
+	path = my-personal-blog/themes/LoveIt
+	url = https://github.com/dillonzq/LoveIt.git
+[submodule "temp-loveit"]
+	path = temp-loveit
+	url = https://github.com/dillonzq/LoveIt.git
