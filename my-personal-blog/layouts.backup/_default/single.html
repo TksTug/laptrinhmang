@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="{{ "css/styles.css" | relURL }}">
+</head>
+<body>
+    {{ partial "header.html" . }}
+    <main>
+        <article>
+            <h1>{{ .Title }}</h1>
+            <div class="post-meta">
+                <time datetime="{{ .Date }}">{{ .Date.Format "January 2, 2006" }}</time>
+                <span>by {{ .Params.author }}</span>
+            </div>
+            <div class="post-content">
+                {{ .Content }}
+            </div>
+        </article>
+    </main>
+    <footer>
+        <p>&copy; {{ now.Format "2006" }} Your Blog Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>

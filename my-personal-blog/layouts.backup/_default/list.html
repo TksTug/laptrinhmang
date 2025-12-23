@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="{{ "css/styles.css" | relURL }}">
+</head>
+<body>
+    {{ partial "header.html" . }}
+    <main>
+        <h1>{{ .Title }}</h1>
+        <ul>
+            {{ range .Pages }}
+                <li>
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    <p>{{ .Summary }}</p>
+                </li>
+            {{ end }}
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; {{ now.Format "2006" }} Your Blog Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>

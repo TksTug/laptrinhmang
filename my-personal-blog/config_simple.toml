@@ -1,0 +1,47 @@
+baseURL = "https://yourusername.github.io/my-personal-blog"
+languageCode = "vi"
+title = "Blog Lập Trình Mạng"
+theme = "LoveIt"
+themesDir = "themes"
+
+[menu]
+  [[menu.main]]
+    weight = 1
+    identifier = "home"
+    name = "Home"
+    url = "/"
+  [[menu.main]]
+    weight = 2
+    identifier = "posts"
+    name = "Blog"
+    url = "/posts/"
+  [[menu.main]]
+    weight = 3
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+
+[params]
+  defaultTheme = "auto"
+  title = "Blog Lập Trình Mạng"
+  description = "Blog chia sẻ về lập trình mạng với Java và JavaScript"
+  author = "Tên của bạn"
+
+  [params.home]
+    rss = 10
+    [params.home.profile]
+      enable = true
+      title = "Chào mừng đến với Blog Lập Trình Mạng"
+      subtitle = "Tôi là [Tên của bạn], lập trình viên đam mê mạng. Blog này chia sẻ kiến thức Java & JavaScript từ các khóa học."
+      typeit = true
+      social = false
+    [params.home.posts]
+      enable = true
+      paginate = 6
+
+  [params.page]
+    comment = false
+    share = false
+
+ignoreLogs = ['warning-goldmark-raw-html']
+ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]

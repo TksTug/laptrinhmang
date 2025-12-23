@@ -1,0 +1,12 @@
+{{- $pc := .Page.Site.Config.Privacy.Instagram -}}
+{{- if not $pc.Disable -}}
+  {{- $id := .Get 0 -}}
+  {{- if $id -}}
+    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/{{ $id }}/" data-instgrm-version="14" style=" max-width:540px; width:100%; width:calc(100% - 2px); width:calc(100% - 2px);">
+      <div style="padding:16px;">
+        <a href="https://www.instagram.com/p/{{ $id }}/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">View this post on Instagram</a>
+      </div>
+    </blockquote>
+    <script async src="//www.instagram.com/embed.js"></script>
+  {{- end -}}
+{{- end -}}

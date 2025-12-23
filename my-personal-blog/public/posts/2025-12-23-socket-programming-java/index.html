@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/my-personal-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-personal-blog/livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Socket Programming với Java — Giao tiếp Mạng Cơ bản - Blog Lập Trình Mạng</title><meta name="Description" content="Hugo theme - LoveIt"><meta property="og:url" content="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/">
+  <meta property="og:site_name" content="Blog Lập Trình Mạng">
+  <meta property="og:title" content="Socket Programming với Java — Giao tiếp Mạng Cơ bản">
+  <meta property="og:description" content="Hướng dẫn chi tiết về Socket Programming trong Java - cách tạo server, client và giao tiếp qua mạng.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-23T08:00:00+07:00">
+    <meta property="article:modified_time" content="2025-12-23T08:00:00+07:00">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="Socket">
+    <meta property="article:tag" content="Network-Programming">
+    <meta property="og:image" content="http://localhost:1313/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/logo.png">
+  <meta name="twitter:title" content="Socket Programming với Java — Giao tiếp Mạng Cơ bản">
+  <meta name="twitter:description" content="Hướng dẫn chi tiết về Socket Programming trong Java - cách tạo server, client và giao tiếp qua mạng.">
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" /><link rel="next" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" /><link rel="stylesheet" href="/my-personal-blog/css/style.min.css"><link rel="preload" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css"></noscript><link rel="preload" href="/my-personal-blog/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Socket Programming với Java — Giao tiếp Mạng Cơ bản",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-socket-programming-java\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/Apple-Devices-Preview.png",
+                            "width":  3200 ,
+                            "height":  2048 
+                        }],"genre": "posts","keywords": "java, socket, network-programming","wordcount":  814 ,
+        "url": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-socket-programming-java\/","datePublished": "2025-12-23T08:00:00+07:00","dateModified": "2025-12-23T08:00:00+07:00","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": {
+                    "@type": "ImageObject",
+                    "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/avatar.png",
+                    "width":  528 ,
+                    "height":  560 
+                }},"author": {
+                "@type": "Person",
+                "name": "xxxx"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/my-personal-blog/posts/"> Posts </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search articles..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search articles..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/my-personal-blog/posts/" title="">Posts</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Socket Programming với Java — Giao tiếp Mạng Cơ bản</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/my-personal-blog/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>xxxx</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-12-23">2025-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;814 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#giới-thiệu-socket-programming">Giới thiệu Socket Programming</a>
+      <ul>
+        <li><a href="#socket-là-gì">Socket là gì?</a></li>
+      </ul>
+    </li>
+    <li><a href="#tcp-socket-programming">TCP Socket Programming</a>
+      <ul>
+        <li><a href="#1-tạo-tcp-server">1. Tạo TCP Server</a></li>
+        <li><a href="#2-tạo-tcp-client">2. Tạo TCP Client</a></li>
+      </ul>
+    </li>
+    <li><a href="#udp-socket-programming">UDP Socket Programming</a>
+      <ul>
+        <li><a href="#udp-server">UDP Server</a></li>
+        <li><a href="#udp-client">UDP Client</a></li>
+      </ul>
+    </li>
+    <li><a href="#multi-threaded-server">Multi-threaded Server</a></li>
+    <li><a href="#khái-niệm-quan-trọng">Khái niệm quan trọng</a>
+      <ul>
+        <li><a href="#port-numbers">Port Numbers</a></li>
+        <li><a href="#connection-states">Connection States</a></li>
+        <li><a href="#timeout">Timeout</a></li>
+      </ul>
+    </li>
+    <li><a href="#kết-luận">Kết luận</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="giới-thiệu-socket-programming">Giới thiệu Socket Programming</h2>
+<p>Socket là một điểm cuối của một kết nối mạng. Thông qua socket, hai chương trình có thể giao tiếp với nhau qua mạng, dù chúng ở trên cùng một máy tính hay trên các máy tính khác nhau.</p>
+<h3 id="socket-là-gì">Socket là gì?</h3>
+<ul>
+<li><strong>Socket = Ổ cắm mạng</strong>: Tương tự như ổ cắm điện, socket là nơi kết nối vào mạng.</li>
+<li><strong>IP Address + Port</strong>: Một socket được định danh bằng địa chỉ IP và số cổng (port).</li>
+<li><strong>Hai loại Socket</strong>: TCP Socket (định hướng kết nối) và UDP Socket (không kết nối).</li>
+</ul>
+<h2 id="tcp-socket-programming">TCP Socket Programming</h2>
+<p>TCP (Transmission Control Protocol) đảm bảo dữ liệu được gửi đến đích một cách chính xác và theo thứ tự.</p>
+<h3 id="1-tạo-tcp-server">1. Tạo TCP Server</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TCPServer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Tạo ServerSocket lắng nghe trên cổng 5000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ServerSocket</span><span class="w"> </span><span class="n">serverSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ServerSocket</span><span class="p">(</span><span class="n">5000</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Server đang lắng nghe trên cổng 5000...&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Chấp nhận kết nối từ client</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Socket</span><span class="w"> </span><span class="n">clientSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serverSocket</span><span class="p">.</span><span class="na">accept</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Client đã kết nối từ: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">clientSocket</span><span class="p">.</span><span class="na">getInetAddress</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Tạo input stream để nhận dữ liệu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">BufferedReader</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedReader</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">InputStreamReader</span><span class="p">(</span><span class="n">clientSocket</span><span class="p">.</span><span class="na">getInputStream</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Tạo output stream để gửi dữ liệu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">PrintWriter</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PrintWriter</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">clientSocket</span><span class="p">.</span><span class="na">getOutputStream</span><span class="p">(),</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Đọc dữ liệu từ client</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="na">readLine</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Nhận được: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Gửi phản hồi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">output</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Server đã nhận: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Đóng kết nối</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">clientSocket</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">serverSocket</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IOException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="2-tạo-tcp-client">2. Tạo TCP Client</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TCPClient</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Kết nối đến server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Socket</span><span class="w"> </span><span class="n">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Socket</span><span class="p">(</span><span class="s">&#34;localhost&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">5000</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Đã kết nối đến server&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Tạo output stream để gửi dữ liệu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">PrintWriter</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PrintWriter</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">socket</span><span class="p">.</span><span class="na">getOutputStream</span><span class="p">(),</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Tạo input stream để nhận dữ liệu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">BufferedReader</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedReader</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">InputStreamReader</span><span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="na">getInputStream</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Gửi dữ liệu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">output</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Xin chào Server!&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Nhận phản hồi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="na">readLine</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Phản hồi từ server: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">response</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Đóng kết nối</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IOException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="udp-socket-programming">UDP Socket Programming</h2>
+<p>UDP (User Datagram Protocol) không đảm bảo gửi đến mà chỉ cố gắng gửi dữ liệu nhanh nhất có thể.</p>
+<h3 id="udp-server">UDP Server</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UDPServer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Tạo DatagramSocket lắng nghe trên cổng 5001</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">DatagramSocket</span><span class="w"> </span><span class="n">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramSocket</span><span class="p">(</span><span class="n">5001</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">receiveData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="n">1024</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;UDP Server đang lắng nghe trên cổng 5001...&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Nhận datagram</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">DatagramPacket</span><span class="w"> </span><span class="n">receivePacket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramPacket</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">receiveData</span><span class="p">,</span><span class="w"> </span><span class="n">receiveData</span><span class="p">.</span><span class="na">length</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">receive</span><span class="p">(</span><span class="n">receivePacket</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Lấy dữ liệu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">receivePacket</span><span class="p">.</span><span class="na">getData</span><span class="p">(),</span><span class="w"> </span><span class="n">0</span><span class="p">,</span><span class="w"> </span><span class="n">receivePacket</span><span class="p">.</span><span class="na">getLength</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Nhận được: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Từ: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">receivePacket</span><span class="p">.</span><span class="na">getAddress</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Gửi phản hồi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">sendData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;Đã nhận dữ liệu&#34;</span><span class="p">.</span><span class="na">getBytes</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">DatagramPacket</span><span class="w"> </span><span class="n">sendPacket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramPacket</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">sendData</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">sendData</span><span class="p">.</span><span class="na">length</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">receivePacket</span><span class="p">.</span><span class="na">getAddress</span><span class="p">(),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">receivePacket</span><span class="p">.</span><span class="na">getPort</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">sendPacket</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="udp-client">UDP Client</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UDPClient</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">DatagramSocket</span><span class="w"> </span><span class="n">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramSocket</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">sendData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;Xin chào UDP Server!&#34;</span><span class="p">.</span><span class="na">getBytes</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Gửi datagram đến server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">DatagramPacket</span><span class="w"> </span><span class="n">sendPacket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramPacket</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">sendData</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">sendData</span><span class="p">.</span><span class="na">length</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">InetAddress</span><span class="p">.</span><span class="na">getByName</span><span class="p">(</span><span class="s">&#34;localhost&#34;</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">5001</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">sendPacket</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Nhận phản hồi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">receiveData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="n">1024</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">DatagramPacket</span><span class="w"> </span><span class="n">receivePacket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramPacket</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">receiveData</span><span class="p">,</span><span class="w"> </span><span class="n">receiveData</span><span class="p">.</span><span class="na">length</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">receive</span><span class="p">(</span><span class="n">receivePacket</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">receivePacket</span><span class="p">.</span><span class="na">getData</span><span class="p">(),</span><span class="w"> </span><span class="n">0</span><span class="p">,</span><span class="w"> </span><span class="n">receivePacket</span><span class="p">.</span><span class="na">getLength</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Phản hồi: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">response</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="multi-threaded-server">Multi-threaded Server</h2>
+<p>Để xử lý nhiều client cùng lúc, sử dụng threads:</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MultiThreadedServer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ServerSocket</span><span class="w"> </span><span class="n">serverSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ServerSocket</span><span class="p">(</span><span class="n">5000</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Server đang chạy...&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">clientNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">Socket</span><span class="w"> </span><span class="n">clientSocket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serverSocket</span><span class="p">.</span><span class="na">accept</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">clientNumber</span><span class="o">++</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Client #&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">clientNumber</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34; đã kết nối&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="c1">// Tạo thread mới để xử lý client</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">Thread</span><span class="w"> </span><span class="n">clientThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="n">ClientHandler</span><span class="p">(</span><span class="n">clientSocket</span><span class="p">,</span><span class="w"> </span><span class="n">clientNumber</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">clientThread</span><span class="p">.</span><span class="na">start</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IOException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">ClientHandler</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Runnable</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Socket</span><span class="w"> </span><span class="n">socket</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">clientNumber</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">ClientHandler</span><span class="p">(</span><span class="n">Socket</span><span class="w"> </span><span class="n">socket</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">clientNumber</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">socket</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">clientNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clientNumber</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">BufferedReader</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedReader</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">InputStreamReader</span><span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="na">getInputStream</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">PrintWriter</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PrintWriter</span><span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="na">getOutputStream</span><span class="p">(),</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="na">readLine</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Client #&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">clientNumber</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">output</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Echo: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">socket</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Client #&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">clientNumber</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34; đã ngắt kết nối&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IOException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="khái-niệm-quan-trọng">Khái niệm quan trọng</h2>
+<h3 id="port-numbers">Port Numbers</h3>
+<ul>
+<li><strong>0-1023</strong>: Hệ thống (System)</li>
+<li><strong>1024-49151</strong>: Người dùng đăng ký</li>
+<li><strong>49152-65535</strong>: Động/Riêng tư</li>
+</ul>
+<h3 id="connection-states">Connection States</h3>
+<ul>
+<li><strong>LISTENING</strong>: Server chờ kết nối</li>
+<li><strong>ESTABLISHED</strong>: Kết nối đã thiết lập</li>
+<li><strong>CLOSING</strong>: Đóng kết nối</li>
+</ul>
+<h3 id="timeout">Timeout</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">socket</span><span class="p">.</span><span class="na">setSoTimeout</span><span class="p">(</span><span class="n">5000</span><span class="p">);</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">5</span><span class="w"> </span><span class="n">giây</span><span class="w"> </span><span class="n">timeout</span></span></span></code></pre></div></div>
+<h2 id="kết-luận">Kết luận</h2>
+<p>Socket Programming là nền tảng của giao tiếp mạng. Hiểu rõ TCP/UDP sockets sẽ giúp bạn xây dựng các ứng dụng mạng mạnh mẽ như chat, game, hoặc web services.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-12-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/my-personal-blog/posts/2025-12-23-socket-programming-java/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on X" data-sharer="x" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" data-title="Socket Programming với Java — Giao tiếp Mạng Cơ bản" data-hashtags="java,socket,network-programming"><i class="fab fa-x-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Threads" data-sharer="threads" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" data-title="Socket Programming với Java — Giao tiếp Mạng Cơ bản"><i class="fab fa-threads fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" data-hashtag="java"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" data-title="Socket Programming với Java — Giao tiếp Mạng Cơ bản"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" data-title="Socket Programming với Java — Giao tiếp Mạng Cơ bản"><i data-svg-src="/my-personal-blog/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" data-title="Socket Programming với Java — Giao tiếp Mạng Cơ bản"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Diaspora" data-sharer="diaspora" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" data-title="Socket Programming với Java — Giao tiếp Mạng Cơ bản" data-description=""><i class="fab fa-diaspora fa-fw" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=http%3a%2f%2flocalhost%3a1313%2fmy-personal-blog%2fposts%2f2025-12-23-socket-programming-java%2f&amp;text=Socket%20Programming%20v%e1%bb%9bi%20Java%20%e2%80%94%20Giao%20ti%e1%ba%bfp%20M%e1%ba%a1ng%20C%c6%a1%20b%e1%ba%a3n" target="_blank" title="Share on Telegram"><i class="fab fa-telegram fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-nav">
+            <a href="/my-personal-blog/posts/2025-12-23-http-protocol-web/" class="next" rel="next" title="HTTP Protocol và Web Communication — Từ Request đến Response">HTTP Protocol và Web Communication — Từ Request đến Response<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.150.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.1-DEV"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/my-personal-blog/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script src="/my-personal-blog/lib/autocomplete/autocomplete.min.js"></script><script src="/my-personal-blog/lib/lunr/lunr.min.js"></script><script src="/my-personal-blog/lib/lazysizes/lazysizes.min.js"></script><script src="/my-personal-blog/lib/clipboard/clipboard.min.js"></script><script src="/my-personal-blog/lib/sharer/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/my-personal-blog/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script src="/my-personal-blog/js/theme.min.js"></script></body>
+</html>

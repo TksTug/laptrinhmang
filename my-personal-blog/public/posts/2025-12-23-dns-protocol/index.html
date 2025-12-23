@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/my-personal-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-personal-blog/livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>DNS Protocol — Cách Internet Dịch Tên Miền thành IP - Blog Lập Trình Mạng</title><meta name="Description" content="Hugo theme - LoveIt"><meta property="og:url" content="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/">
+  <meta property="og:site_name" content="Blog Lập Trình Mạng">
+  <meta property="og:title" content="DNS Protocol — Cách Internet Dịch Tên Miền thành IP">
+  <meta property="og:description" content="Tìm hiểu cách DNS hoạt động, cấu trúc DNS queries, và cách phân giải tên miền.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-23T09:00:00+07:00">
+    <meta property="article:modified_time" content="2025-12-23T09:00:00+07:00">
+    <meta property="article:tag" content="Dns">
+    <meta property="article:tag" content="Network-Protocol">
+    <meta property="article:tag" content="Internet">
+    <meta property="og:image" content="http://localhost:1313/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/logo.png">
+  <meta name="twitter:title" content="DNS Protocol — Cách Internet Dịch Tên Miền thành IP">
+  <meta name="twitter:description" content="Tìm hiểu cách DNS hoạt động, cấu trúc DNS queries, và cách phân giải tên miền.">
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" /><link rel="prev" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" /><link rel="next" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" /><link rel="stylesheet" href="/my-personal-blog/css/style.min.css"><link rel="preload" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css"></noscript><link rel="preload" href="/my-personal-blog/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "DNS Protocol — Cách Internet Dịch Tên Miền thành IP",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-dns-protocol\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/Apple-Devices-Preview.png",
+                            "width":  3200 ,
+                            "height":  2048 
+                        }],"genre": "posts","keywords": "dns, network-protocol, internet","wordcount":  766 ,
+        "url": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-dns-protocol\/","datePublished": "2025-12-23T09:00:00+07:00","dateModified": "2025-12-23T09:00:00+07:00","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": {
+                    "@type": "ImageObject",
+                    "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/avatar.png",
+                    "width":  528 ,
+                    "height":  560 
+                }},"author": {
+                "@type": "Person",
+                "name": "xxxx"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/my-personal-blog/posts/"> Posts </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search articles..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search articles..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/my-personal-blog/posts/" title="">Posts</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">DNS Protocol — Cách Internet Dịch Tên Miền thành IP</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/my-personal-blog/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>xxxx</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-12-23">2025-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;766 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#dns-là-gì">DNS là gì?</a></li>
+    <li><a href="#cấu-trúc-dns">Cấu trúc DNS</a>
+      <ul>
+        <li><a href="#hierarchical-structure">Hierarchical Structure</a></li>
+        <li><a href="#dns-record-types">DNS Record Types</a></li>
+        <li><a href="#ví-dụ-dns-records">Ví dụ DNS Records</a></li>
+      </ul>
+    </li>
+    <li><a href="#dns-query-process">DNS Query Process</a>
+      <ul>
+        <li><a href="#1-recursive-query">1. Recursive Query</a></li>
+      </ul>
+    </li>
+    <li><a href="#dns-packet-structure">DNS Packet Structure</a>
+      <ul>
+        <li><a href="#query-packet">Query Packet</a></li>
+      </ul>
+    </li>
+    <li><a href="#caching-và-ttl">Caching và TTL</a>
+      <ul>
+        <li><a href="#ttl-time-to-live">TTL (Time To Live)</a></li>
+      </ul>
+    </li>
+    <li><a href="#dns-security-issues">DNS Security Issues</a>
+      <ul>
+        <li><a href="#dns-spoofing">DNS Spoofing</a></li>
+        <li><a href="#dns-amplification-attack">DNS Amplification Attack</a></li>
+      </ul>
+    </li>
+    <li><a href="#dns-tools">DNS Tools</a>
+      <ul>
+        <li><a href="#nslookup">nslookup</a></li>
+        <li><a href="#dig-domain-information-groper">dig (Domain Information Groper)</a></li>
+        <li><a href="#host">host</a></li>
+      </ul>
+    </li>
+    <li><a href="#thực-hành-với-java">Thực hành với Java</a>
+      <ul>
+        <li><a href="#dns-query">DNS Query</a></li>
+        <li><a href="#custom-dns-client">Custom DNS Client</a></li>
+      </ul>
+    </li>
+    <li><a href="#dns-best-practices">DNS Best Practices</a></li>
+    <li><a href="#kết-luận">Kết luận</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="dns-là-gì">DNS là gì?</h2>
+<p>DNS (Domain Name System) là hệ thống phân giải tên miền trên Internet. Khi bạn gõ <code>google.com</code> vào trình duyệt, DNS sẽ dịch nó thành địa chỉ IP như <code>142.250.185.46</code>.</p>
+<p><strong>Tại sao cần DNS?</strong></p>
+<ul>
+<li>Con người nhớ tên dễ hơn IP (google.com vs 142.250.185.46)</li>
+<li>IP có thể thay đổi, nhưng tên miền ổn định</li>
+<li>Dễ quản lý và scale</li>
+</ul>
+<h2 id="cấu-trúc-dns">Cấu trúc DNS</h2>
+<h3 id="hierarchical-structure">Hierarchical Structure</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>                    . (Root)
+                    |
+        +---+---+---+---+---+
+        |   |   |   |   |   |
+       com  org  net  edu  vn
+        |   |   |   |   |   |
+      google yahoo  |   |   |</code></pre></div>
+<p><strong>Các cấp:</strong></p>
+<ol>
+<li><strong>Root Domain</strong> (.)</li>
+<li><strong>Top-Level Domain</strong> (TLD): .com, .org, .vn&hellip;</li>
+<li><strong>Second-Level Domain</strong>: google, facebook&hellip;</li>
+<li><strong>Subdomain</strong>: mail.google.com, api.github.com&hellip;</li>
+</ol>
+<h3 id="dns-record-types">DNS Record Types</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Record</th>
+          <th>Mục đích</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>A</strong></td>
+          <td>IPv4 Address (192.168.1.1)</td>
+      </tr>
+      <tr>
+          <td><strong>AAAA</strong></td>
+          <td>IPv6 Address</td>
+      </tr>
+      <tr>
+          <td><strong>CNAME</strong></td>
+          <td>Canonical Name (Alias)</td>
+      </tr>
+      <tr>
+          <td><strong>MX</strong></td>
+          <td>Mail Exchange (Email Server)</td>
+      </tr>
+      <tr>
+          <td><strong>TXT</strong></td>
+          <td>Text Record (SPF, DKIM&hellip;)</td>
+      </tr>
+      <tr>
+          <td><strong>NS</strong></td>
+          <td>Name Server</td>
+      </tr>
+      <tr>
+          <td><strong>SOA</strong></td>
+          <td>Start of Authority</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="ví-dụ-dns-records">Ví dụ DNS Records</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>example.com.    300 IN A       192.168.1.1
+www.example.com. 300 IN CNAME example.com.
+example.com.    300 IN MX 10   mail.example.com.
+example.com.    300 IN TXT    &#34;v=spf1 mx ~all&#34;</code></pre></div>
+<h2 id="dns-query-process">DNS Query Process</h2>
+<h3 id="1-recursive-query">1. Recursive Query</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Client Browser
+    |
+    | 1. &#34;What&#39;s IP of google.com?&#34;
+    v
+Recursive Resolver (ISP)
+    |
+    | 2. &#34;What&#39;s IP of google.com?&#34;
+    v
+Root Nameserver
+    |
+    | 3. &#34;Ask .com nameserver&#34;
+    v
+TLD Nameserver (.com)
+    |
+    | 4. &#34;Ask google&#39;s nameserver&#34;
+    v
+Authoritative Nameserver
+    |
+    | 5. &#34;IP is 142.250.185.46&#34;
+    v
+Recursive Resolver
+    |
+    | 6. Returns IP to client
+    v
+Client Browser</code></pre></div>
+<p><strong>Bước chi tiết:</strong></p>
+<ol>
+<li><strong>Local Query</strong>: Trình duyệt kiểm tra cache cục bộ</li>
+<li><strong>Recursive Resolver</strong>: Nếu không có, hỏi ISP&rsquo;s resolver</li>
+<li><strong>Root Nameserver</strong>: Resolver hỏi root server</li>
+<li><strong>TLD Nameserver</strong>: Root chỉ đến TLD server</li>
+<li><strong>Authoritative Nameserver</strong>: TLD chỉ đến server có quyền</li>
+<li><strong>Response</strong>: Đáp án được trả lại qua mỗi bước</li>
+</ol>
+<h2 id="dns-packet-structure">DNS Packet Structure</h2>
+<h3 id="query-packet">Query Packet</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>+-----+-----+-----+-----+-----+-----+-----+-----+
+|                      ID                      |  (2 bytes)
++-----+-----+-----+-----+-----+-----+-----+-----+
+|QR|  Opcode   |AA|TC|RD|RA| Z |RCODE         |  (2 bytes)
++-----+-----+-----+-----+-----+-----+-----+-----+
+|                   QDCOUNT                    |  (2 bytes)
++-----+-----+-----+-----+-----+-----+-----+-----+
+|                   ANCOUNT                    |  (2 bytes)
++-----+-----+-----+-----+-----+-----+-----+-----+
+|                   NSCOUNT                    |  (2 bytes)
++-----+-----+-----+-----+-----+-----+-----+-----+
+|                   ARCOUNT                    |  (2 bytes)
++-----+-----+-----+-----+-----+-----+-----+-----+
+|                                             |
+|              Question Section                |
+|                                             |
++-----+-----+-----+-----+-----+-----+-----+-----+</code></pre></div>
+<h2 id="caching-và-ttl">Caching và TTL</h2>
+<h3 id="ttl-time-to-live">TTL (Time To Live)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>example.com.    3600 IN A 192.168.1.1</code></pre></div>
+<ul>
+<li>TTL = 3600 giây (1 giờ)</li>
+<li>Cache lưu kết quả trong 1 giờ</li>
+<li>Sau 1 giờ, phải query lại</li>
+</ul>
+<p><strong>Caching Levels:</strong></p>
+<ol>
+<li><strong>Browser Cache</strong>: 5-30 phút</li>
+<li><strong>OS Cache</strong>: 5-10 phút</li>
+<li><strong>Resolver Cache</strong>: 1-24 giờ</li>
+<li><strong>Authoritative Server</strong>: TTL được set</li>
+</ol>
+<h2 id="dns-security-issues">DNS Security Issues</h2>
+<h3 id="dns-spoofing">DNS Spoofing</h3>
+<p>Attacker giả mạo response DNS để redirect traffic:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>User queries: What&#39;s IP of bank.com?
+Attacker responds: 192.168.1.100 (fake)
+User connects to attacker&#39;s server</code></pre></div>
+<p><strong>Giải pháp:</strong> DNSSEC (DNS Security Extensions)</p>
+<h3 id="dns-amplification-attack">DNS Amplification Attack</h3>
+<p>Attacker sử dụng DNS server để tấn công DDoS:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Attacker -&gt; DNS Server
+(&#34;What&#39;s ALL DNS records for example.com?&#34;)
+|
+v
+DNS Server -&gt; Victim
+(Large response - Amplification)</code></pre></div>
+<p><strong>Bảo vệ:</strong> Rate limiting, query restrictions</p>
+<h2 id="dns-tools">DNS Tools</h2>
+<h3 id="nslookup">nslookup</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nslookup google.com
+</span></span><span class="line"><span class="cl">nslookup -type<span class="o">=</span>MX google.com
+</span></span><span class="line"><span class="cl">nslookup 142.250.185.46  <span class="c1"># Reverse lookup</span></span></span></code></pre></div></div>
+<h3 id="dig-domain-information-groper">dig (Domain Information Groper)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dig google.com
+</span></span><span class="line"><span class="cl">dig google.com +short
+</span></span><span class="line"><span class="cl">dig google.com MX
+</span></span><span class="line"><span class="cl">dig @8.8.8.8 google.com  <span class="c1"># Query specific DNS server</span></span></span></code></pre></div></div>
+<h3 id="host">host</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">host google.com
+</span></span><span class="line"><span class="cl">host -t MX google.com</span></span></code></pre></div></div>
+<h2 id="thực-hành-với-java">Thực hành với Java</h2>
+<h3 id="dns-query">DNS Query</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DNSLookup</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">UnknownHostException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;google.com&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Forward lookup</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">InetAddress</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">InetAddress</span><span class="p">.</span><span class="na">getByName</span><span class="p">(</span><span class="n">hostname</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Hostname: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="na">getHostName</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;IP: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">address</span><span class="p">.</span><span class="na">getHostAddress</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Get all addresses</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">InetAddress</span><span class="o">[]</span><span class="w"> </span><span class="n">addresses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">InetAddress</span><span class="p">.</span><span class="na">getAllByName</span><span class="p">(</span><span class="n">hostname</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;\nAll IPs:&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">InetAddress</span><span class="w"> </span><span class="n">addr</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">addresses</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">addr</span><span class="p">.</span><span class="na">getHostAddress</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Reverse lookup</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">InetAddress</span><span class="w"> </span><span class="n">ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">InetAddress</span><span class="p">.</span><span class="na">getByName</span><span class="p">(</span><span class="s">&#34;8.8.8.8&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;\nReverse lookup of 8.8.8.8:&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">ip</span><span class="p">.</span><span class="na">getHostName</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="custom-dns-client">Custom DNS Client</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SimpleDNSClient</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;example.com&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">53</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">DatagramSocket</span><span class="w"> </span><span class="n">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramSocket</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Tạo DNS query packet (simplified)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createDNSQuery</span><span class="p">(</span><span class="n">hostname</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">DatagramPacket</span><span class="w"> </span><span class="n">packet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramPacket</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">query</span><span class="p">.</span><span class="na">length</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">InetAddress</span><span class="p">.</span><span class="na">getByName</span><span class="p">(</span><span class="s">&#34;8.8.8.8&#34;</span><span class="p">),</span><span class="w"> </span><span class="n">port</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">socket</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">packet</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Receive response</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="n">512</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">DatagramPacket</span><span class="w"> </span><span class="n">responsePacket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DatagramPacket</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="na">length</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">socket</span><span class="p">.</span><span class="na">receive</span><span class="p">(</span><span class="n">responsePacket</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Parse response (simplified)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Got DNS response&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">socket</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="nf">createDNSQuery</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">hostname</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Simplified DNS query creation</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// In reality, need proper DNS packet format</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="dns-best-practices">DNS Best Practices</h2>
+<ol>
+<li><strong>Sử dụng multiple DNS servers</strong>: 8.8.8.8 (Google), 1.1.1.1 (Cloudflare)</li>
+<li><strong>Implement DNS caching</strong>: Giảm latency</li>
+<li><strong>Sử dụng DNSSEC</strong>: Bảo vệ khỏi spoofing</li>
+<li><strong>Monitor DNS queries</strong>: Phát hiện dị thường</li>
+<li><strong>Thiết lập TTL phù hợp</strong>: Balance giữa freshness và performance</li>
+</ol>
+<h2 id="kết-luận">Kết luận</h2>
+<p>DNS là &ldquo;phonebook của Internet&rdquo;. Mặc dù hoạt động phía sau, nó là yếu tố critical cho:</p>
+<p>✅ Khám phá services<br>
+✅ Load balancing<br>
+✅ Failover<br>
+✅ Bảo mật</p>
+<p>Hiểu DNS giúp bạn diagnose vấn đề mạng và tối ưu hóa ứng dụng web!</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-12-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/my-personal-blog/posts/2025-12-23-dns-protocol/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on X" data-sharer="x" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" data-title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP" data-hashtags="dns,network-protocol,internet"><i class="fab fa-x-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Threads" data-sharer="threads" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" data-title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP"><i class="fab fa-threads fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" data-hashtag="dns"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" data-title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" data-title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP"><i data-svg-src="/my-personal-blog/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" data-title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Diaspora" data-sharer="diaspora" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" data-title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP" data-description=""><i class="fab fa-diaspora fa-fw" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=http%3a%2f%2flocalhost%3a1313%2fmy-personal-blog%2fposts%2f2025-12-23-dns-protocol%2f&amp;text=DNS%20Protocol%20%e2%80%94%20C%c3%a1ch%20Internet%20D%e1%bb%8bch%20T%c3%aan%20Mi%e1%bb%81n%20th%c3%a0nh%20IP" target="_blank" title="Share on Telegram"><i class="fab fa-telegram fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-nav"><a href="/my-personal-blog/posts/2025-12-23-http-protocol-web/" class="prev" rel="prev" title="HTTP Protocol và Web Communication — Từ Request đến Response"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>HTTP Protocol và Web Communication — Từ Request đến Response</a>
+            <a href="/my-personal-blog/posts/2025-12-23-restful-apis/" class="next" rel="next" title="RESTful APIs — Thiết kế API Web Hiện đại">RESTful APIs — Thiết kế API Web Hiện đại<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.150.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.1-DEV"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/my-personal-blog/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script src="/my-personal-blog/lib/autocomplete/autocomplete.min.js"></script><script src="/my-personal-blog/lib/lunr/lunr.min.js"></script><script src="/my-personal-blog/lib/lazysizes/lazysizes.min.js"></script><script src="/my-personal-blog/lib/clipboard/clipboard.min.js"></script><script src="/my-personal-blog/lib/sharer/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/my-personal-blog/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script src="/my-personal-blog/js/theme.min.js"></script></body>
+</html>

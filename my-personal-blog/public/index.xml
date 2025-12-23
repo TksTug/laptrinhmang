@@ -1,0 +1,81 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Blog Lập Trình Mạng</title>
+        <link>http://localhost:1313/my-personal-blog/</link>
+        <description>Hugo theme - LoveIt</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 23 Dec 2025 13:00:00 &#43;0700</lastBuildDate>
+            <atom:link href="http://localhost:1313/my-personal-blog/index.xml" rel="self" type="application/rss+xml" />
+        <item>
+    <title>Proxy Servers &amp; Network Intermediaries — Trung gian Mạng</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-proxy-servers/</link>
+    <pubDate>Tue, 23 Dec 2025 13:00:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-proxy-servers/</guid>
+    <description><![CDATA[Tìm hiểu về proxy servers, cách hoạt động, và ứng dụng thực tế trong network.]]></description>
+</item>
+<item>
+    <title>Load Balancing &amp; Scalability — Mở rộng Ứng dụng</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-load-balancing/</link>
+    <pubDate>Tue, 23 Dec 2025 12:00:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-load-balancing/</guid>
+    <description><![CDATA[Kỹ thuật load balancing để xử lý hàng triệu requests và mở rộng hệ thống.]]></description>
+</item>
+<item>
+    <title>Network Security Basics — Bảo vệ Mạng của Bạn</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/</link>
+    <pubDate>Tue, 23 Dec 2025 11:00:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/</guid>
+    <description><![CDATA[Các nguyên tắc bảo mật mạng cơ bản và cách bảo vệ ứng dụng từ các cuộc tấn công.]]></description>
+</item>
+<item>
+    <title>TCP/IP Stack — Hiểu Kiến trúc Internet</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-tcp-ip-stack/</link>
+    <pubDate>Tue, 23 Dec 2025 10:30:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-tcp-ip-stack/</guid>
+    <description><![CDATA[Tìm hiểu kiến trúc TCP/IP 4 tầng - nền tảng của Internet.]]></description>
+</item>
+<item>
+    <title>WebSocket — Real-time Communication với JavaScript</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-websocket-realtime/</link>
+    <pubDate>Tue, 23 Dec 2025 10:00:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-websocket-realtime/</guid>
+    <description><![CDATA[Tìm hiểu WebSocket - cách tạo ứng dụng real-time như chat, notifications.]]></description>
+</item>
+<item>
+    <title>RESTful APIs — Thiết kế API Web Hiện đại</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/</link>
+    <pubDate>Tue, 23 Dec 2025 09:30:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/</guid>
+    <description><![CDATA[Hướng dẫn thiết kế RESTful APIs - cách xây dựng web services hiệu quả.]]></description>
+</item>
+<item>
+    <title>DNS Protocol — Cách Internet Dịch Tên Miền thành IP</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/</link>
+    <pubDate>Tue, 23 Dec 2025 09:00:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/</guid>
+    <description><![CDATA[Tìm hiểu cách DNS hoạt động, cấu trúc DNS queries, và cách phân giải tên miền.]]></description>
+</item>
+<item>
+    <title>HTTP Protocol và Web Communication — Từ Request đến Response</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/</link>
+    <pubDate>Tue, 23 Dec 2025 08:30:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/</guid>
+    <description><![CDATA[Tìm hiểu chi tiết về HTTP protocol - cách trình duyệt giao tiếp với server web.]]></description>
+</item>
+<item>
+    <title>Socket Programming với Java — Giao tiếp Mạng Cơ bản</title>
+    <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/</link>
+    <pubDate>Tue, 23 Dec 2025 08:00:00 &#43;0700</pubDate>
+    <author>xxxx</author>
+    <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/</guid>
+    <description><![CDATA[Hướng dẫn chi tiết về Socket Programming trong Java - cách tạo server, client và giao tiếp qua mạng.]]></description>
+</item>
+</channel>
+</rss>

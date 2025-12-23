@@ -1,0 +1,3 @@
+{{- $url := .Get 0 | default .Page.Permalink -}}
+{{- $text := .Get 1 | default .Page.Title -}}
+<a href="https://x.com/intent/tweet?url={{ $url }}&text={{ $text }}" target="_blank" rel="noopener noreferrer">Tweet</a>

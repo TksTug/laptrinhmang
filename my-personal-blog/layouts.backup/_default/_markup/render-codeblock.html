@@ -1,0 +1,3 @@
+{{- if .Inner -}}
+<pre{{ with .Attributes.class }} class="{{ . }}"{{ end }}><code{{ with .Attributes.id }} id="{{ . }}"{{ end }}>{{ .Inner }}</code></pre>
+{{- end -}}

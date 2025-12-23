@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/my-personal-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-personal-blog/livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>HTTP Protocol và Web Communication — Từ Request đến Response - Blog Lập Trình Mạng</title><meta name="Description" content="Hugo theme - LoveIt"><meta property="og:url" content="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/">
+  <meta property="og:site_name" content="Blog Lập Trình Mạng">
+  <meta property="og:title" content="HTTP Protocol và Web Communication — Từ Request đến Response">
+  <meta property="og:description" content="Tìm hiểu chi tiết về HTTP protocol - cách trình duyệt giao tiếp với server web.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-23T08:30:00+07:00">
+    <meta property="article:modified_time" content="2025-12-23T08:30:00+07:00">
+    <meta property="article:tag" content="Http">
+    <meta property="article:tag" content="Web">
+    <meta property="article:tag" content="Network">
+    <meta property="og:image" content="http://localhost:1313/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/logo.png">
+  <meta name="twitter:title" content="HTTP Protocol và Web Communication — Từ Request đến Response">
+  <meta name="twitter:description" content="Tìm hiểu chi tiết về HTTP protocol - cách trình duyệt giao tiếp với server web.">
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" /><link rel="prev" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-socket-programming-java/" /><link rel="next" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" /><link rel="stylesheet" href="/my-personal-blog/css/style.min.css"><link rel="preload" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css"></noscript><link rel="preload" href="/my-personal-blog/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "HTTP Protocol và Web Communication — Từ Request đến Response",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-http-protocol-web\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/Apple-Devices-Preview.png",
+                            "width":  3200 ,
+                            "height":  2048 
+                        }],"genre": "posts","keywords": "http, web, network","wordcount":  717 ,
+        "url": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-http-protocol-web\/","datePublished": "2025-12-23T08:30:00+07:00","dateModified": "2025-12-23T08:30:00+07:00","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": {
+                    "@type": "ImageObject",
+                    "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/avatar.png",
+                    "width":  528 ,
+                    "height":  560 
+                }},"author": {
+                "@type": "Person",
+                "name": "xxxx"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/my-personal-blog/posts/"> Posts </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search articles..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search articles..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/my-personal-blog/posts/" title="">Posts</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">HTTP Protocol và Web Communication — Từ Request đến Response</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/my-personal-blog/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>xxxx</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-12-23">2025-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;717 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#http-protocol-là-gì">HTTP Protocol là gì?</a>
+      <ul>
+        <li><a href="#đặc-điểm-chính">Đặc điểm chính</a></li>
+      </ul>
+    </li>
+    <li><a href="#http-request">HTTP Request</a>
+      <ul>
+        <li><a href="#cấu-trúc-request">Cấu trúc Request</a></li>
+        <li><a href="#http-methods">HTTP Methods</a></li>
+        <li><a href="#ví-dụ-get-request">Ví dụ GET Request</a></li>
+        <li><a href="#ví-dụ-post-request">Ví dụ POST Request</a></li>
+      </ul>
+    </li>
+    <li><a href="#http-response">HTTP Response</a>
+      <ul>
+        <li><a href="#cấu-trúc-response">Cấu trúc Response</a></li>
+        <li><a href="#http-status-codes">HTTP Status Codes</a></li>
+        <li><a href="#các-status-code-phổ-biến">Các Status Code phổ biến</a></li>
+      </ul>
+    </li>
+    <li><a href="#https---http-bảo-mật">HTTPS - HTTP Bảo mật</a></li>
+    <li><a href="#http-headers-quan-trọng">HTTP Headers quan trọng</a>
+      <ul>
+        <li><a href="#request-headers">Request Headers</a></li>
+        <li><a href="#response-headers">Response Headers</a></li>
+      </ul>
+    </li>
+    <li><a href="#connection-management">Connection Management</a>
+      <ul>
+        <li><a href="#http11-keep-alive">HTTP/1.1 Keep-Alive</a></li>
+        <li><a href="#http2">HTTP/2</a></li>
+      </ul>
+    </li>
+    <li><a href="#ví-dụ-thực-tế-với-java">Ví dụ thực tế với Java</a>
+      <ul>
+        <li><a href="#gửi-http-request">Gửi HTTP Request</a></li>
+        <li><a href="#nhận-http-request-simple-server">Nhận HTTP Request (Simple Server)</a></li>
+      </ul>
+    </li>
+    <li><a href="#kết-luận">Kết luận</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="http-protocol-là-gì">HTTP Protocol là gì?</h2>
+<p>HTTP (HyperText Transfer Protocol) là giao thức cơ bản cho World Wide Web. Mỗi lần bạn truy cập một trang web, trình duyệt của bạn đang sử dụng HTTP để giao tiếp với server.</p>
+<h3 id="đặc-điểm-chính">Đặc điểm chính</h3>
+<ul>
+<li><strong>Client-Server Model</strong>: Client (trình duyệt) gửi request, Server trả lại response.</li>
+<li><strong>Stateless</strong>: Mỗi request độc lập, server không lưu trữ thông tin về request trước.</li>
+<li><strong>Text-based</strong>: HTTP sử dụng text ASCII, dễ đọc và debug.</li>
+<li><strong>Port mặc định</strong>: Port 80 (HTTP), Port 443 (HTTPS).</li>
+</ul>
+<h2 id="http-request">HTTP Request</h2>
+<h3 id="cấu-trúc-request">Cấu trúc Request</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0
+Accept: text/html</code></pre></div>
+<p><strong>Gồm 4 phần:</strong></p>
+<ol>
+<li>
+<p><strong>Request Line</strong>: <code>METHOD PATH HTTP/VERSION</code></p>
+<ul>
+<li>Method: GET, POST, PUT, DELETE, HEAD, OPTIONS&hellip;</li>
+<li>Path: /index.html</li>
+<li>Version: HTTP/1.1 hoặc HTTP/2</li>
+</ul>
+</li>
+<li>
+<p><strong>Headers</strong>: Các thông tin bổ sung</p>
+<ul>
+<li><code>Host</code>: Tên miền/máy chủ</li>
+<li><code>User-Agent</code>: Thông tin trình duyệt</li>
+<li><code>Content-Length</code>: Kích thước body</li>
+<li><code>Content-Type</code>: Loại dữ liệu (application/json, text/html&hellip;)</li>
+</ul>
+</li>
+<li>
+<p><strong>Empty Line</strong>: Dòng trống phân cách header và body</p>
+</li>
+<li>
+<p><strong>Body</strong>: Dữ liệu (chỉ có với POST, PUT)</p>
+</li>
+</ol>
+<h3 id="http-methods">HTTP Methods</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Method</th>
+          <th>Mục đích</th>
+          <th>Body</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>GET</strong></td>
+          <td>Lấy dữ liệu</td>
+          <td>Không</td>
+      </tr>
+      <tr>
+          <td><strong>POST</strong></td>
+          <td>Gửi dữ liệu</td>
+          <td>Có</td>
+      </tr>
+      <tr>
+          <td><strong>PUT</strong></td>
+          <td>Cập nhật dữ liệu</td>
+          <td>Có</td>
+      </tr>
+      <tr>
+          <td><strong>DELETE</strong></td>
+          <td>Xóa dữ liệu</td>
+          <td>Không</td>
+      </tr>
+      <tr>
+          <td><strong>HEAD</strong></td>
+          <td>Như GET nhưng không lấy body</td>
+          <td>Không</td>
+      </tr>
+      <tr>
+          <td><strong>OPTIONS</strong></td>
+          <td>Lấy các phương thức hỗ trợ</td>
+          <td>Không</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="ví-dụ-get-request">Ví dụ GET Request</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/users/123 HTTP/1.1
+Host: api.example.com
+Accept: application/json</code></pre></div>
+<h3 id="ví-dụ-post-request">Ví dụ POST Request</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>POST /api/users HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+Content-Length: 27
+
+{&#34;name&#34;:&#34;Tùng&#34;,&#34;age&#34;:25}</code></pre></div>
+<h2 id="http-response">HTTP Response</h2>
+<h3 id="cấu-trúc-response">Cấu trúc Response</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 1234
+
+&lt;html&gt;...&lt;/html&gt;</code></pre></div>
+<p><strong>Gồm 4 phần:</strong></p>
+<ol>
+<li><strong>Status Line</strong>: <code>HTTP/VERSION STATUS_CODE STATUS_MESSAGE</code></li>
+<li><strong>Headers</strong>: Thông tin phản hồi</li>
+<li><strong>Empty Line</strong>: Dòng trống</li>
+<li><strong>Body</strong>: Nội dung (HTML, JSON, &hellip;)</li>
+</ol>
+<h3 id="http-status-codes">HTTP Status Codes</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Code</th>
+          <th>Ý nghĩa</th>
+          <th>Ví dụ</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>1xx</strong></td>
+          <td>Informational</td>
+          <td>100 Continue</td>
+      </tr>
+      <tr>
+          <td><strong>2xx</strong></td>
+          <td>Success</td>
+          <td>200 OK, 201 Created</td>
+      </tr>
+      <tr>
+          <td><strong>3xx</strong></td>
+          <td>Redirection</td>
+          <td>301 Moved Permanently, 302 Found</td>
+      </tr>
+      <tr>
+          <td><strong>4xx</strong></td>
+          <td>Client Error</td>
+          <td>400 Bad Request, 404 Not Found, 403 Forbidden</td>
+      </tr>
+      <tr>
+          <td><strong>5xx</strong></td>
+          <td>Server Error</td>
+          <td>500 Internal Error, 503 Service Unavailable</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="các-status-code-phổ-biến">Các Status Code phổ biến</h3>
+<ul>
+<li><strong>200 OK</strong>: Request thành công</li>
+<li><strong>201 Created</strong>: Tạo mới resource thành công</li>
+<li><strong>204 No Content</strong>: Thành công nhưng không có nội dung trả lại</li>
+<li><strong>301 Moved Permanently</strong>: Redirect vĩnh viễn</li>
+<li><strong>302 Found</strong>: Redirect tạm thời</li>
+<li><strong>400 Bad Request</strong>: Client gửi yêu cầu sai</li>
+<li><strong>401 Unauthorized</strong>: Cần xác thực</li>
+<li><strong>403 Forbidden</strong>: Không có quyền</li>
+<li><strong>404 Not Found</strong>: Không tìm thấy resource</li>
+<li><strong>500 Internal Server Error</strong>: Lỗi server</li>
+</ul>
+<h2 id="https---http-bảo-mật">HTTPS - HTTP Bảo mật</h2>
+<p>HTTPS = HTTP + TLS/SSL encryption</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /secure-data HTTP/1.1
+Host: secure.example.com</code></pre></div>
+<p><strong>Quy trình:</strong></p>
+<ol>
+<li>Client gửi request HTTP thông thường</li>
+<li>Server trả về certificate</li>
+<li>Client xác minh certificate</li>
+<li>Thiết lập SSL/TLS connection</li>
+<li>Tất cả dữ liệu sau đó được mã hóa</li>
+</ol>
+<h2 id="http-headers-quan-trọng">HTTP Headers quan trọng</h2>
+<h3 id="request-headers">Request Headers</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Host: example.com
+User-Agent: Mozilla/5.0
+Accept: application/json
+Authorization: Bearer token123
+Content-Type: application/json
+Cookie: sessionid=abc123</code></pre></div>
+<h3 id="response-headers">Response Headers</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Content-Type: application/json
+Content-Length: 1024
+Set-Cookie: sessionid=abc123
+Cache-Control: max-age=3600
+ETag: &#34;33a64df551425fcc55e4d42a148795d9f25f89d4&#34;
+Last-Modified: Mon, 23 Dec 2025 10:00:00 GMT</code></pre></div>
+<h2 id="connection-management">Connection Management</h2>
+<h3 id="http11-keep-alive">HTTP/1.1 Keep-Alive</h3>
+<p>Giữ kết nối mở để gửi nhiều requests:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /index.html HTTP/1.1
+Host: example.com
+Connection: keep-alive</code></pre></div>
+<h3 id="http2">HTTP/2</h3>
+<ul>
+<li><strong>Multiplexing</strong>: Gửi nhiều requests trên 1 connection</li>
+<li><strong>Header Compression</strong>: Giảm kích thước headers</li>
+<li><strong>Server Push</strong>: Server gửi dữ liệu chủ động</li>
+</ul>
+<h2 id="ví-dụ-thực-tế-với-java">Ví dụ thực tế với Java</h2>
+<h3 id="gửi-http-request">Gửi HTTP Request</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">HttpClient</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">URL</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">URL</span><span class="p">(</span><span class="s">&#34;http://api.example.com/data&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">HttpURLConnection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">HttpURLConnection</span><span class="p">)</span><span class="w"> </span><span class="n">url</span><span class="p">.</span><span class="na">openConnection</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Set request method</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="na">setRequestMethod</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="na">setRequestProperty</span><span class="p">(</span><span class="s">&#34;Accept&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;application/json&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Get response code</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">statusCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">getResponseCode</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Status: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">statusCode</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Read response</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">BufferedReader</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedReader</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">InputStreamReader</span><span class="p">(</span><span class="n">conn</span><span class="p">.</span><span class="na">getInputStream</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">line</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="na">readLine</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">line</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">reader</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="nhận-http-request-simple-server">Nhận HTTP Request (Simple Server)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SimpleHttpServer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ServerSocket</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ServerSocket</span><span class="p">(</span><span class="n">8080</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Server running on port 8080&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Socket</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="na">accept</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">BufferedReader</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedReader</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">InputStreamReader</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="na">getInputStream</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">requestLine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="na">readLine</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Request: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">requestLine</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Send response</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">PrintWriter</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PrintWriter</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="na">getOutputStream</span><span class="p">(),</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">writer</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;HTTP/1.1 200 OK&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">writer</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Content-Type: text/html&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">writer</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Content-Length: 12&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">writer</span><span class="p">.</span><span class="na">println</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">writer</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Hello World!&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">client</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="kết-luận">Kết luận</h2>
+<p>HTTP là giao thức cơ bản nhất cho web. Hiểu rõ HTTP request/response sẽ giúp bạn:</p>
+<p>✅ Xây dựng web services<br>
+✅ Debug vấn đề giao tiếp<br>
+✅ Tối ưu hóa hiệu suất<br>
+✅ Hiểu rõ RESTful APIs</p>
+<p>HTTP có vẻ đơn giản nhưng là nền tảng của toàn bộ web ngày nay!</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-12-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/my-personal-blog/posts/2025-12-23-http-protocol-web/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on X" data-sharer="x" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" data-title="HTTP Protocol và Web Communication — Từ Request đến Response" data-hashtags="http,web,network"><i class="fab fa-x-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Threads" data-sharer="threads" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" data-title="HTTP Protocol và Web Communication — Từ Request đến Response"><i class="fab fa-threads fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" data-hashtag="http"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" data-title="HTTP Protocol và Web Communication — Từ Request đến Response"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" data-title="HTTP Protocol và Web Communication — Từ Request đến Response"><i data-svg-src="/my-personal-blog/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" data-title="HTTP Protocol và Web Communication — Từ Request đến Response"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Diaspora" data-sharer="diaspora" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-http-protocol-web/" data-title="HTTP Protocol và Web Communication — Từ Request đến Response" data-description=""><i class="fab fa-diaspora fa-fw" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=http%3a%2f%2flocalhost%3a1313%2fmy-personal-blog%2fposts%2f2025-12-23-http-protocol-web%2f&amp;text=HTTP%20Protocol%20v%c3%a0%20Web%20Communication%20%e2%80%94%20T%e1%bb%ab%20Request%20%c4%91%e1%ba%bfn%20Response" target="_blank" title="Share on Telegram"><i class="fab fa-telegram fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-nav"><a href="/my-personal-blog/posts/2025-12-23-socket-programming-java/" class="prev" rel="prev" title="Socket Programming với Java — Giao tiếp Mạng Cơ bản"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Socket Programming với Java — Giao tiếp Mạng Cơ bản</a>
+            <a href="/my-personal-blog/posts/2025-12-23-dns-protocol/" class="next" rel="next" title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP">DNS Protocol — Cách Internet Dịch Tên Miền thành IP<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.150.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.1-DEV"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/my-personal-blog/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script src="/my-personal-blog/lib/autocomplete/autocomplete.min.js"></script><script src="/my-personal-blog/lib/lunr/lunr.min.js"></script><script src="/my-personal-blog/lib/lazysizes/lazysizes.min.js"></script><script src="/my-personal-blog/lib/clipboard/clipboard.min.js"></script><script src="/my-personal-blog/lib/sharer/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/my-personal-blog/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script src="/my-personal-blog/js/theme.min.js"></script></body>
+</html>

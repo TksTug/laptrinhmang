@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Real-Time on Blog Lập Trình Mạng</title>
+    <link>http://localhost:1313/my-personal-blog/tags/real-time/</link>
+    <description>Recent content in Real-Time on Blog Lập Trình Mạng</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 23 Dec 2025 10:00:00 +0700</lastBuildDate>
+    <atom:link href="http://localhost:1313/my-personal-blog/tags/real-time/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>WebSocket — Real-time Communication với JavaScript</title>
+      <link>http://localhost:1313/my-personal-blog/posts/2025-12-23-websocket-realtime/</link>
+      <pubDate>Tue, 23 Dec 2025 10:00:00 +0700</pubDate>
+      <guid>http://localhost:1313/my-personal-blog/posts/2025-12-23-websocket-realtime/</guid>
+      <description>Tìm hiểu WebSocket - cách tạo ứng dụng real-time như chat, notifications.</description>
+    </item>
+  </channel>
+</rss>
