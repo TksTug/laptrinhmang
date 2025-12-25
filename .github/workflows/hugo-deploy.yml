@@ -41,7 +41,7 @@ jobs:
         run: cd my-personal-blog && hugo --minify
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./my-personal-blog/public
 
