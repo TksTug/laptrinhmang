@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/my-personal-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-personal-blog/livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>RESTful APIs — Thiết kế API Web Hiện đại - Blog Lập Trình Mạng</title><meta name="Description" content="Hugo theme - LoveIt"><meta property="og:url" content="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/">
+  <meta property="og:site_name" content="Blog Lập Trình Mạng">
+  <meta property="og:title" content="RESTful APIs — Thiết kế API Web Hiện đại">
+  <meta property="og:description" content="Hướng dẫn thiết kế RESTful APIs - cách xây dựng web services hiệu quả.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-23T09:30:00+07:00">
+    <meta property="article:modified_time" content="2025-12-23T09:30:00+07:00">
+    <meta property="article:tag" content="Rest">
+    <meta property="article:tag" content="Api">
+    <meta property="article:tag" content="Web-Services">
+    <meta property="og:image" content="http://localhost:1313/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/logo.png">
+  <meta name="twitter:title" content="RESTful APIs — Thiết kế API Web Hiện đại">
+  <meta name="twitter:description" content="Hướng dẫn thiết kế RESTful APIs - cách xây dựng web services hiệu quả.">
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" /><link rel="prev" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-dns-protocol/" /><link rel="next" href="http://localhost:1313/my-personal-blog/posts/2025-12-23-websocket-realtime/" /><link rel="stylesheet" href="/my-personal-blog/css/style.min.css"><link rel="preload" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/fontawesome-free/css/all.min.css"></noscript><link rel="preload" href="/my-personal-blog/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/my-personal-blog/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "RESTful APIs — Thiết kế API Web Hiện đại",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-restful-apis\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/Apple-Devices-Preview.png",
+                            "width":  3200 ,
+                            "height":  2048 
+                        }],"genre": "posts","keywords": "rest, api, web-services","wordcount":  862 ,
+        "url": "http:\/\/localhost:1313\/my-personal-blog\/posts\/2025-12-23-restful-apis\/","datePublished": "2025-12-23T09:30:00+07:00","dateModified": "2025-12-23T09:30:00+07:00","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": {
+                    "@type": "ImageObject",
+                    "url": "http:\/\/localhost:1313\/my-personal-blog\/images\/avatar.png",
+                    "width":  528 ,
+                    "height":  560 
+                }},"author": {
+                "@type": "Person",
+                "name": "xxxx"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/my-personal-blog/posts/"> Posts </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search articles..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/my-personal-blog/" title="Blog Lập Trình Mạng"><span class="header-title-pre"><i class='fas fa-bars fa-fw' aria-hidden='true'></i></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search articles..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/my-personal-blog/posts/" title="">Posts</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">RESTful APIs — Thiết kế API Web Hiện đại</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/my-personal-blog/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>xxxx</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-12-23">2025-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;862 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#rest-là-gì">REST là gì?</a>
+      <ul>
+        <li><a href="#restful-principles">RESTful Principles</a></li>
+      </ul>
+    </li>
+    <li><a href="#resource-vs-action">Resource vs Action</a>
+      <ul>
+        <li><a href="#sai-rpc-style">Sai (RPC-style)</a></li>
+        <li><a href="#đúng-rest-style">Đúng (REST-style)</a></li>
+      </ul>
+    </li>
+    <li><a href="#http-methods-trong-rest">HTTP Methods trong REST</a>
+      <ul>
+        <li><a href="#get---lấy-dữ-liệu">GET - Lấy dữ liệu</a></li>
+        <li><a href="#post---tạo-dữ-liệu">POST - Tạo dữ liệu</a></li>
+        <li><a href="#put---cập-nhật-hoàn-toàn">PUT - Cập nhật hoàn toàn</a></li>
+        <li><a href="#patch---cập-nhật-một-phần">PATCH - Cập nhật một phần</a></li>
+        <li><a href="#delete---xóa-dữ-liệu">DELETE - Xóa dữ liệu</a></li>
+      </ul>
+    </li>
+    <li><a href="#api-design-patterns">API Design Patterns</a>
+      <ul>
+        <li><a href="#versioning">Versioning</a></li>
+        <li><a href="#filtering-sorting-pagination">Filtering, Sorting, Pagination</a></li>
+        <li><a href="#nested-resources">Nested Resources</a></li>
+        <li><a href="#relationships">Relationships</a></li>
+      </ul>
+    </li>
+    <li><a href="#http-status-codes-trong-rest">HTTP Status Codes trong REST</a>
+      <ul>
+        <li><a href="#2xx---success">2xx - Success</a></li>
+        <li><a href="#3xx---redirection">3xx - Redirection</a></li>
+        <li><a href="#4xx---client-error">4xx - Client Error</a></li>
+        <li><a href="#5xx---server-error">5xx - Server Error</a></li>
+      </ul>
+    </li>
+    <li><a href="#error-handling">Error Handling</a>
+      <ul>
+        <li><a href="#cách-sai">Cách sai</a></li>
+        <li><a href="#cách-đúng">Cách đúng</a></li>
+      </ul>
+    </li>
+    <li><a href="#authentication--authorization">Authentication &amp; Authorization</a>
+      <ul>
+        <li><a href="#basic-auth">Basic Auth</a></li>
+        <li><a href="#bearer-token-jwt">Bearer Token (JWT)</a></li>
+        <li><a href="#api-key">API Key</a></li>
+      </ul>
+    </li>
+    <li><a href="#ví-dụ-rest-api-với-java--spring-boot">Ví dụ REST API với Java + Spring Boot</a></li>
+    <li><a href="#hateoas-hypermedia-as-the-engine">HATEOAS (Hypermedia As The Engine)</a></li>
+    <li><a href="#rest-maturity-model-richardson">REST Maturity Model (Richardson)</a></li>
+    <li><a href="#best-practices">Best Practices</a></li>
+    <li><a href="#kết-luận">Kết luận</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="rest-là-gì">REST là gì?</h2>
+<p>REST (Representational State Transfer) là một kiến trúc software cho việc xây dựng web services. REST sử dụng HTTP methods để thực hiện các thao tác trên tài nguyên.</p>
+<h3 id="restful-principles">RESTful Principles</h3>
+<ol>
+<li><strong>Client-Server Architecture</strong>: Tách biệt giữa client và server</li>
+<li><strong>Statelessness</strong>: Mỗi request chứa đầy đủ thông tin</li>
+<li><strong>Uniform Interface</strong>: API có interface thống nhất</li>
+<li><strong>Resource-oriented</strong>: Tập trung vào resources, không phải actions</li>
+<li><strong>Cacheable</strong>: Response có thể cache được</li>
+</ol>
+<h2 id="resource-vs-action">Resource vs Action</h2>
+<h3 id="sai-rpc-style">Sai (RPC-style)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/getUser/123
+GET /api/getUserList
+POST /api/createUser
+POST /api/deleteUser/123
+POST /api/updateUser/123</code></pre></div>
+<p><strong>Vấn đề:</strong> Lẫn lộn giữa action (verb) và resource (noun)</p>
+<h3 id="đúng-rest-style">Đúng (REST-style)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/users/123          # Get user 123
+GET /api/users              # Get all users
+POST /api/users             # Create new user
+PUT /api/users/123          # Update user 123
+DELETE /api/users/123       # Delete user 123</code></pre></div>
+<p><strong>Tốt hơn:</strong> Rõ ràng về resource và method</p>
+<h2 id="http-methods-trong-rest">HTTP Methods trong REST</h2>
+<h3 id="get---lấy-dữ-liệu">GET - Lấy dữ liệu</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/users/123
+GET /api/users?page=1&amp;limit=10
+GET /api/users?role=admin</code></pre></div>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>Idempotent (gọi nhiều lần kết quả giống nhau)</li>
+<li>Safe (không thay đổi dữ liệu)</li>
+<li>Cacheable</li>
+</ul>
+<h3 id="post---tạo-dữ-liệu">POST - Tạo dữ liệu</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>POST /api/users
+Content-Type: application/json
+
+{
+  &#34;name&#34;: &#34;John&#34;,
+  &#34;email&#34;: &#34;john@example.com&#34;
+}</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>201 Created
+Location: /api/users/123
+
+{
+  &#34;id&#34;: 123,
+  &#34;name&#34;: &#34;John&#34;,
+  &#34;email&#34;: &#34;john@example.com&#34;
+}</code></pre></div>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>Không idempotent (gọi 2 lần tạo 2 users)</li>
+<li>Không safe</li>
+<li>Không cacheable (trong hầu hết trường hợp)</li>
+</ul>
+<h3 id="put---cập-nhật-hoàn-toàn">PUT - Cập nhật hoàn toàn</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>PUT /api/users/123
+Content-Type: application/json
+
+{
+  &#34;name&#34;: &#34;Jane&#34;,
+  &#34;email&#34;: &#34;jane@example.com&#34;
+}</code></pre></div>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>Idempotent (cập nhật cùng 1 nội dung bao nhiêu lần cũng như nhau)</li>
+<li>Thay thế toàn bộ resource</li>
+</ul>
+<h3 id="patch---cập-nhật-một-phần">PATCH - Cập nhật một phần</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>PATCH /api/users/123
+Content-Type: application/json
+
+{
+  &#34;name&#34;: &#34;Jane&#34;
+}</code></pre></div>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>Cập nhật chỉ các field được gửi</li>
+<li>Không phải lúc nào cũng idempotent</li>
+</ul>
+<h3 id="delete---xóa-dữ-liệu">DELETE - Xóa dữ liệu</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>DELETE /api/users/123</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>204 No Content</code></pre></div>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>Idempotent (xóa 2 lần vẫn được)</li>
+<li>Không safe</li>
+</ul>
+<h2 id="api-design-patterns">API Design Patterns</h2>
+<h3 id="versioning">Versioning</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /v1/users
+GET /v2/users        # Khác version</code></pre></div>
+<p>Hoặc với header:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/users
+Accept-Version: v1</code></pre></div>
+<h3 id="filtering-sorting-pagination">Filtering, Sorting, Pagination</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/users?role=admin&amp;status=active    # Filter
+GET /api/users?sort=-created_at             # Sort (descending)
+GET /api/users?page=2&amp;limit=20              # Pagination</code></pre></div>
+<h3 id="nested-resources">Nested Resources</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/users/123/posts
+GET /api/users/123/posts/456
+POST /api/users/123/posts
+PUT /api/users/123/posts/456
+DELETE /api/users/123/posts/456</code></pre></div>
+<h3 id="relationships">Relationships</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/users/123?include=posts,comments</code></pre></div>
+<h2 id="http-status-codes-trong-rest">HTTP Status Codes trong REST</h2>
+<h3 id="2xx---success">2xx - Success</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>200 OK              - Request thành công
+201 Created         - Tạo mới resource
+204 No Content      - Thành công, không có body</code></pre></div>
+<h3 id="3xx---redirection">3xx - Redirection</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>301 Moved Permanently   - Moved vĩnh viễn
+302 Found              - Moved tạm thời
+304 Not Modified       - Có thể dùng cache</code></pre></div>
+<h3 id="4xx---client-error">4xx - Client Error</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>400 Bad Request         - Request sai format
+401 Unauthorized        - Cần xác thực
+403 Forbidden           - Không có quyền
+404 Not Found           - Resource không tồn tại
+409 Conflict            - Xung đột (duplicate key...)
+422 Unprocessable       - Dữ liệu không hợp lệ</code></pre></div>
+<h3 id="5xx---server-error">5xx - Server Error</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>500 Internal Server Error    - Lỗi server
+503 Service Unavailable      - Server maintenance</code></pre></div>
+<h2 id="error-handling">Error Handling</h2>
+<h3 id="cách-sai">Cách sai</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">HTTP</span> <span class="mi">200</span> <span class="err">OK</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;message&#34;</span><span class="p">:</span> <span class="s2">&#34;User not found&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="cách-đúng">Cách đúng</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">HTTP</span> <span class="mi">404</span> <span class="err">Not</span> <span class="err">Found</span>
+</span></span><span class="line"><span class="cl"><span class="err">Content-Type:</span> <span class="err">application/json</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;code&#34;</span><span class="p">:</span> <span class="s2">&#34;USER_NOT_FOUND&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;message&#34;</span><span class="p">:</span> <span class="s2">&#34;User with ID 123 not found&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;details&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;userId&#34;</span><span class="p">:</span> <span class="mi">123</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="authentication--authorization">Authentication &amp; Authorization</h2>
+<h3 id="basic-auth">Basic Auth</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/protected
+Authorization: Basic base64(username:password)</code></pre></div>
+<h3 id="bearer-token-jwt">Bearer Token (JWT)</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/protected
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre></div>
+<h3 id="api-key">API Key</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/protected?api_key=abc123xyz</code></pre></div>
+<p>Hoặc với header:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>GET /api/protected
+X-API-Key: abc123xyz</code></pre></div>
+<h2 id="ví-dụ-rest-api-với-java--spring-boot">Ví dụ REST API với Java + Spring Boot</h2>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.*</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.http.HttpStatus</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/api/users&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// GET all users</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getAllUsers</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;0&#34;</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">page</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;10&#34;</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">findAll</span><span class="p">(</span><span class="n">page</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// GET user by ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">getUser</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="na">orElseThrow</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">UserNotFoundException</span><span class="p">(</span><span class="n">id</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// POST create user</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@PostMapping</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@ResponseStatus</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">CREATED</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">createUser</span><span class="p">(</span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">UserRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">request</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// PUT update user</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@PutMapping</span><span class="p">(</span><span class="s">&#34;/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">updateUser</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">UserRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">update</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// PATCH update user</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@PatchMapping</span><span class="p">(</span><span class="s">&#34;/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">patchUser</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nd">@RequestBody</span><span class="w"> </span><span class="n">UserPatchRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">patch</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// DELETE user</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@DeleteMapping</span><span class="p">(</span><span class="s">&#34;/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@ResponseStatus</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">NO_CONTENT</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">deleteUser</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">userService</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="hateoas-hypermedia-as-the-engine">HATEOAS (Hypermedia As The Engine)</h2>
+<p>Cấp cao nhất của REST maturity:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;John&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;email&#34;</span><span class="p">:</span> <span class="s2">&#34;john@example.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;_links&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;self&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;href&#34;</span><span class="p">:</span> <span class="s2">&#34;/api/users/123&#34;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;all&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;href&#34;</span><span class="p">:</span> <span class="s2">&#34;/api/users&#34;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;delete&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;href&#34;</span><span class="p">:</span> <span class="s2">&#34;/api/users/123&#34;</span><span class="p">,</span> <span class="nt">&#34;method&#34;</span><span class="p">:</span> <span class="s2">&#34;DELETE&#34;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;update&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;href&#34;</span><span class="p">:</span> <span class="s2">&#34;/api/users/123&#34;</span><span class="p">,</span> <span class="nt">&#34;method&#34;</span><span class="p">:</span> <span class="s2">&#34;PUT&#34;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="rest-maturity-model-richardson">REST Maturity Model (Richardson)</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right fa-fw" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h fa-fw" aria-hidden="true"></i></span>
+        <span class="copy" title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Level 0: RPC (Tất cả là POST /api)
+Level 1: Resources (Sử dụng URLs /api/users/123)
+Level 2: HTTP Methods (GET, POST, PUT, DELETE)
+Level 3: HATEOAS (Links đến resources khác)</code></pre></div>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Sử dụng HTTP methods chính xác</strong>: GET (read), POST (create), PUT (update), DELETE (delete)</li>
+<li><strong>Response thích hợp</strong>: 201 Created, 204 No Content, 404 Not Found</li>
+<li><strong>Versioning</strong>: Hỗ trợ nhiều versions</li>
+<li><strong>Documentation</strong>: Sử dụng OpenAPI/Swagger</li>
+<li><strong>Rate limiting</strong>: Bảo vệ API khỏi abuse</li>
+<li><strong>CORS</strong>: Xử lý cross-origin requests</li>
+<li><strong>Input validation</strong>: Validate tất cả input</li>
+<li><strong>Security</strong>: HTTPS, authentication, authorization</li>
+</ol>
+<h2 id="kết-luận">Kết luận</h2>
+<p>RESTful APIs là standard cho modern web development. Hiểu rõ REST principles sẽ giúp bạn:</p>
+<p>✅ Thiết kế APIs cleaner và maintainable<br>
+✅ Dễ dàng scale và extend<br>
+✅ Khách hàng dễ dàng sử dụng API<br>
+✅ Tích hợp với hệ thống khác dễ dàng</p>
+<p>REST không phức tạp, chỉ cần follow các nguyên tắc cơ bản!</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-12-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/my-personal-blog/posts/2025-12-23-restful-apis/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on X" data-sharer="x" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" data-title="RESTful APIs — Thiết kế API Web Hiện đại" data-hashtags="rest,api,web-services"><i class="fab fa-x-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Threads" data-sharer="threads" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" data-title="RESTful APIs — Thiết kế API Web Hiện đại"><i class="fab fa-threads fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" data-hashtag="rest"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" data-title="RESTful APIs — Thiết kế API Web Hiện đại"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" data-title="RESTful APIs — Thiết kế API Web Hiện đại"><i data-svg-src="/my-personal-blog/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" data-title="RESTful APIs — Thiết kế API Web Hiện đại"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Diaspora" data-sharer="diaspora" data-url="http://localhost:1313/my-personal-blog/posts/2025-12-23-restful-apis/" data-title="RESTful APIs — Thiết kế API Web Hiện đại" data-description=""><i class="fab fa-diaspora fa-fw" aria-hidden="true"></i></a><a href="https://t.me/share/url?url=http%3a%2f%2flocalhost%3a1313%2fmy-personal-blog%2fposts%2f2025-12-23-restful-apis%2f&amp;text=RESTful%20APIs%20%e2%80%94%20Thi%e1%ba%bft%20k%e1%ba%bf%20API%20Web%20Hi%e1%bb%87n%20%c4%91%e1%ba%a1i" target="_blank" title="Share on Telegram"><i class="fab fa-telegram fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-nav"><a href="/my-personal-blog/posts/2025-12-23-dns-protocol/" class="prev" rel="prev" title="DNS Protocol — Cách Internet Dịch Tên Miền thành IP"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>DNS Protocol — Cách Internet Dịch Tên Miền thành IP</a>
+            <a href="/my-personal-blog/posts/2025-12-23-websocket-realtime/" class="next" rel="next" title="WebSocket — Real-time Communication với JavaScript">WebSocket — Real-time Communication với JavaScript<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.150.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.1-DEV"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/my-personal-blog/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script src="/my-personal-blog/lib/autocomplete/autocomplete.min.js"></script><script src="/my-personal-blog/lib/lunr/lunr.min.js"></script><script src="/my-personal-blog/lib/lazysizes/lazysizes.min.js"></script><script src="/my-personal-blog/lib/clipboard/clipboard.min.js"></script><script src="/my-personal-blog/lib/sharer/sharer.min.js"></script><script>window.config={"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/my-personal-blog/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script src="/my-personal-blog/js/theme.min.js"></script></body>
+</html>

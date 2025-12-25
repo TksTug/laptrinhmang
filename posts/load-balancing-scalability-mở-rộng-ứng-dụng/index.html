@@ -1,0 +1,382 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Load Balancing & Scalability — Mở rộng Ứng dụng - Blog Lập Trình Mạng</title><meta name=Description content="Hugo theme - LoveIt"><meta property="og:url" content="https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/">
+<meta property="og:site_name" content="Blog Lập Trình Mạng"><meta property="og:title" content="Load Balancing & Scalability — Mở rộng Ứng dụng"><meta property="og:description" content="Kỹ thuật load balancing để xử lý hàng triệu requests và mở rộng hệ thống."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-12-23T12:00:00+07:00"><meta property="article:modified_time" content="2025-12-23T12:00:00+07:00"><meta property="article:tag" content="Scalability"><meta property="article:tag" content="Load-Balancing"><meta property="article:tag" content="Architecture"><meta property="og:image" content="https://yourusername.github.io/logo.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://yourusername.github.io/logo.png"><meta name=twitter:title content="Load Balancing & Scalability — Mở rộng Ứng dụng"><meta name=twitter:description content="Kỹ thuật load balancing để xử lý hàng triệu requests và mở rộng hệ thống."><meta name=application-name content="LoveIt"><meta name=apple-mobile-web-app-title content="LoveIt"><meta name=referrer content="no-referrer"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/><link rel=prev href=https://yourusername.github.io/my-personal-blog/posts/network-security-basics-b%E1%BA%A3o-v%E1%BB%87-m%E1%BA%A1ng-c%E1%BB%A7a-b%E1%BA%A1n/><link rel=next href=https://yourusername.github.io/my-personal-blog/posts/proxy-servers-network-intermediaries-trung-gian-m%E1%BA%A1ng/><link rel=stylesheet href=/my-personal-blog/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Load Balancing \u0026 Scalability — Mở rộng Ứng dụng","inLanguage":"en","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/yourusername.github.io\/my-personal-blog\/posts\/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng\/"},"image":[{"@type":"ImageObject","url":"https:\/\/yourusername.github.io\/my-personal-blog\/images\/Apple-Devices-Preview.png","width":3200,"height":2048}],"genre":"posts","keywords":"scalability, load-balancing, architecture","wordcount":1418,"url":"https:\/\/yourusername.github.io\/my-personal-blog\/posts\/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng\/","datePublished":"2025-12-23T12:00:00+07:00","dateModified":"2025-12-23T12:00:00+07:00","publisher":{"@type":"Organization","name":"xxxx","logo":{"@type":"ImageObject","url":"https:\/\/yourusername.github.io\/my-personal-blog\/images\/avatar.png","width":528,"height":560}},"author":{"@type":"Person","name":"xxxx"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script>const query=window.matchMedia("(prefers-color-scheme: dark)");function applyTheme(){let e=window.localStorage?.getItem("theme")||"auto",t=e==="dark"||e==="auto"&&query.matches;document.body.setAttribute("theme",t?"dark":"light"),document.body.setAttribute("cfg-theme",e)}applyTheme(),query.addEventListener("change",applyTheme)</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/my-personal-blog/ title="Blog Lập Trình Mạng"><span class=header-title-pre><i class='fas fa-bars fa-fw' aria-hidden=true></i></span></a></div><div class=menu><div class=menu-inner><a class=menu-item href=/my-personal-blog/posts/>Posts </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search articles..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i>
+</span></span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/my-personal-blog/ title="Blog Lập Trình Mạng"><span class=header-title-pre><i class='fas fa-bars fa-fw' aria-hidden=true></i></span></a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="Search articles..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search><i class="fas fa-search fa-fw" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear><i class="fas fa-times-circle fa-fw" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>Cancel</a></div><a class=menu-item href=/my-personal-blog/posts/ title>Posts</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Load Balancing & Scalability — Mở rộng Ứng dụng</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/my-personal-blog/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>xxxx</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2025-12-23>2025-12-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;1418 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;7 minutes&nbsp;<span id=/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ class=leancloud_visitors data-flag-title="Load Balancing & Scalability — Mở rộng Ứng dụng">
+<i class="far fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#load-balancing-là-gì>Load Balancing Là Gì?</a></li><li><a href=#load-balancing-algorithms>Load Balancing Algorithms</a><ul><li><a href=#1-round-robin>1. Round Robin</a></li><li><a href=#2-least-connections>2. Least Connections</a></li><li><a href=#3-weighted-load-balancing>3. Weighted Load Balancing</a></li><li><a href=#4-ip-hash>4. IP Hash</a></li><li><a href=#5-least-response-time>5. Least Response Time</a></li></ul></li><li><a href=#horizontal-vs-vertical-scaling>Horizontal vs Vertical Scaling</a><ul><li><a href=#vertical-scaling-cộng-chiều>Vertical Scaling (Cộng Chiều)</a></li><li><a href=#horizontal-scaling-mở-rộng-chiều>Horizontal Scaling (Mở Rộng Chiều)</a></li></ul></li><li><a href=#popular-load-balancers>Popular Load Balancers</a><ul><li><a href=#1-nginx>1. Nginx</a></li><li><a href=#2-haproxy>2. HAProxy</a></li><li><a href=#3-aws-load-balancer>3. AWS Load Balancer</a></li></ul></li><li><a href=#health-checks>Health Checks</a></li><li><a href=#session-management>Session Management</a><ul><li><a href=#problem-session-loss>Problem: Session Loss</a></li><li><a href=#solution-1-sticky-sessions>Solution 1: Sticky Sessions</a></li><li><a href=#solution-2-distributed-session-store>Solution 2: Distributed Session Store</a></li></ul></li><li><a href=#auto-scaling>Auto Scaling</a></li><li><a href=#database-scaling>Database Scaling</a><ul><li><a href=#solution-1-read-replicas>Solution 1: Read Replicas</a></li><li><a href=#solution-2-database-sharding>Solution 2: Database Sharding</a></li></ul></li><li><a href=#caching-layer>Caching Layer</a></li><li><a href=#monitoring--observability>Monitoring & Observability</a></li><li><a href=#kết-luận>Kết luận</a></li></ul></nav></div></div><div class=content id=content><h2 id=load-balancing-là-gì>Load Balancing Là Gì?</h2><p>Khi traffic tăng, một server không đủ. Load balancer phân phối requests đến nhiều servers:</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>                    Requests
+                       │
+                       ▼
+                ┌───────────────┐
+                │ Load Balancer │
+                └───────┬───────┘
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+        ▼               ▼               ▼
+    ┌───────────┐ ┌───────────┐ ┌───────────┐
+    │ Server 1  │ │ Server 2  │ │ Server 3  │
+    │ (50% CPU) │ │ (45% CPU) │ │ (40% CPU) │
+    └───────────┘ └───────────┘ └───────────┘
+        │               │               │
+        └───────────────┼───────────────┘
+                        │
+                        ▼
+                   ┌─────────┐
+                   │Database │
+                   └─────────┘</code></pre></div><h2 id=load-balancing-algorithms>Load Balancing Algorithms</h2><h3 id=1-round-robin>1. Round Robin</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Request 1 → Server 1
+Request 2 → Server 2
+Request 3 → Server 3
+Request 4 → Server 1
+Request 5 → Server 2
+Request 6 → Server 3
+...</code></pre></div><p><strong>Ưu điểm:</strong> Đơn giản<br><strong>Nhược điểm:</strong> Không xem xét tải thực tế của server</p><h3 id=2-least-connections>2. Least Connections</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Server 1: 50 active connections
+Server 2: 30 active connections  ← Next request goes here
+Server 3: 45 active connections
+
+Load Balancer picks server with least connections</code></pre></div><p><strong>Ưu điểm:</strong> Cân bằng tốt hơn<br><strong>Nhược điểm:</strong> Một request có thể tốn nhiều tài nguyên</p><h3 id=3-weighted-load-balancing>3. Weighted Load Balancing</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Server 1 (Powerful): 50% of traffic
+Server 2 (Medium):   30% of traffic
+Server 3 (Weak):     20% of traffic
+
+Ratio: 5:3:2</code></pre></div><p><strong>Use case:</strong> Servers có sức mạnh khác nhau</p><h3 id=4-ip-hash>4. IP Hash</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>User IP: 192.168.1.10
+Hash(192.168.1.10) % 3 = 1
+→ Always goes to Server 1 (for session persistence)</code></pre></div><p><strong>Ưu điểm:</strong> Session không mất, cache-friendly<br><strong>Nhược điểm:</strong> Nếu một server down, users phải reconnect</p><h3 id=5-least-response-time>5. Least Response Time</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Server 1: Avg response 50ms
+Server 2: Avg response 100ms ← Previous request slower
+Server 3: Avg response 80ms
+
+Load Balancer picks Server 1 (fastest)</code></pre></div><h2 id=horizontal-vs-vertical-scaling>Horizontal vs Vertical Scaling</h2><h3 id=vertical-scaling-cộng-chiều>Vertical Scaling (Cộng Chiều)</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>1 Server with 2 CPU, 4 GB RAM
+                ↓
+Upgrade to 4 CPU, 16 GB RAM</code></pre></div><p><strong>Ưu điểm:</strong> Đơn giản<br><strong>Nhược điểm:</strong></p><ul><li>Giới hạn vật lý (không thể upgrade vô hạn)</li><li>Downtime khi nâng cấp</li><li>Đắt tiền</li></ul><h3 id=horizontal-scaling-mở-rộng-chiều>Horizontal Scaling (Mở Rộng Chiều)</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>1 Server with 2 CPU, 4 GB RAM
+                ↓
+2 Servers with 2 CPU, 4 GB RAM each
+                ↓
+3 Servers with 2 CPU, 4 GB RAM each</code></pre></div><p><strong>Ưu điểm:</strong></p><ul><li>Không giới hạn (thêm servers khi cần)</li><li>Không downtime</li><li>Chi phí theo nhu cầu</li></ul><p><strong>Nhược điểm:</strong></p><ul><li>Phức tạp (phải quản lý nhiều servers)</li><li>Cần load balancer</li><li>Data consistency khó hơn</li></ul><h2 id=popular-load-balancers>Popular Load Balancers</h2><h3 id=1-nginx>1. Nginx</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-nginx"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-nginx data-lang=nginx><span class=line><span class=cl><span class=k>upstream</span> <span class=s>backend</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kn>server</span> <span class=s>backend1.example.com</span> <span class=s>weight=5</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>server</span> <span class=n>backend2.example.com</span><span class=p>:</span><span class=mi>8080</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kn>server</span> <span class=s>backend3.example.com</span> <span class=s>backup</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>server</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kn>listen</span> <span class=mi>80</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=kn>location</span> <span class=s>/</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kn>proxy_pass</span> <span class=s>http://backend</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></div></div><p><strong>Ưu điểm:</strong></p><ul><li>Open source</li><li>Lightweight</li><li>High performance</li><li>Reverse proxy</li></ul><h3 id=2-haproxy>2. HAProxy</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code># HAProxy config
+listen web_cluster
+    bind *:80
+    balance roundrobin
+    server web1 192.168.1.10:8080 check
+    server web2 192.168.1.11:8080 check
+    server web3 192.168.1.12:8080 check</code></pre></div><p><strong>Ưu điểm:</strong></p><ul><li>Powerful configuration</li><li>Good for L4-L7 balancing</li><li>Active/passive health checks</li></ul><h3 id=3-aws-load-balancer>3. AWS Load Balancer</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Internet
+  ↓
+ALB (Application Load Balancer) - Layer 7
+├─ Path-based routing
+├─ Host-based routing
+└─ Port-based routing
+  ↓
+┌─────────────────────────────┐
+│    Auto Scaling Group       │
+│ ┌──────┐ ┌──────┐ ┌──────┐ │
+│ │ EC2  │ │ EC2  │ │ EC2  │ │
+│ └──────┘ └──────┘ └──────┘ │
+│ (Auto scales based on CPU)  │
+└─────────────────────────────┘</code></pre></div><h2 id=health-checks>Health Checks</h2><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Load Balancer checks every 5 seconds:
+Server 1: GET /health → 200 OK ✓ (Healthy)
+Server 2: GET /health → 503 Timeout ✗ (Unhealthy)
+Server 3: GET /health → 200 OK ✓ (Healthy)
+
+New requests:
+→ Server 1 and 3 only
+→ Server 2 removed from pool until it recovers</code></pre></div><p><strong>Health Check Endpoint:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-java"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@RestController</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>HealthController</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Autowired</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>DatabaseService</span><span class=w> </span><span class=n>db</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@GetMapping</span><span class=p>(</span><span class=s>&#34;/health&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>ResponseEntity</span><span class=o>&lt;</span><span class=n>Health</span><span class=o>&gt;</span><span class=w> </span><span class=nf>health</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// Check database connection</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>db</span><span class=p>.</span><span class=na>ping</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>return</span><span class=w> </span><span class=n>ResponseEntity</span><span class=p>.</span><span class=na>ok</span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>new</span><span class=w> </span><span class=n>Health</span><span class=p>(</span><span class=s>&#34;UP&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Database OK&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>Exception</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>return</span><span class=w> </span><span class=n>ResponseEntity</span><span class=p>.</span><span class=na>status</span><span class=p>(</span><span class=n>503</span><span class=p>).</span><span class=na>body</span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>new</span><span class=w> </span><span class=n>Health</span><span class=p>(</span><span class=s>&#34;DOWN&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Database Error: &#34;</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>e</span><span class=p>.</span><span class=na>getMessage</span><span class=p>())</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span></span></span></code></pre></div></div><h2 id=session-management>Session Management</h2><h3 id=problem-session-loss>Problem: Session Loss</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Request 1 (User login)
+→ Server 1: Creates session, stores session_id=abc123
+→ User gets cookie: session_id=abc123
+
+Request 2
+→ Load Balancer routes to Server 2
+→ Server 2: Doesn&#39;t have session abc123!
+→ User must login again ❌</code></pre></div><h3 id=solution-1-sticky-sessions>Solution 1: Sticky Sessions</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Load Balancer: 
+&#34;If session_id=abc123, always go to Server 1&#34;
+
+Cookie: session_id=abc123
+└─ Always routes to Server 1</code></pre></div><p><strong>Ưu điểm:</strong> Đơn giản<br><strong>Nhược điểm:</strong></p><ul><li>If Server 1 dies → User loses session</li><li>Uneven load (some servers busier)</li></ul><h3 id=solution-2-distributed-session-store>Solution 2: Distributed Session Store</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>┌──────────┐  ┌──────────┐  ┌──────────┐
+│ Server 1 │  │ Server 2 │  │ Server 3 │
+└────┬─────┘  └────┬─────┘  └────┬─────┘
+     │             │             │
+     └─────────────┼─────────────┘
+                   │
+                   ▼
+            ┌──────────────┐
+            │ Redis Cluster│
+            │(Session Store)
+            └──────────────┘</code></pre></div><p><strong>Code Example:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-java"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// Spring Session with Redis</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Configuration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@EnableRedisHttpSession</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>SessionConfig</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Spring auto-saves sessions to Redis</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@RestController</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>LoginController</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@PostMapping</span><span class=p>(</span><span class=s>&#34;/login&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=nf>login</span><span class=p>(</span><span class=n>HttpSession</span><span class=w> </span><span class=n>session</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>username</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>session</span><span class=p>.</span><span class=na>setAttribute</span><span class=p>(</span><span class=s>&#34;username&#34;</span><span class=p>,</span><span class=w> </span><span class=n>username</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// Saved to Redis automatically</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=s>&#34;Login OK&#34;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@GetMapping</span><span class=p>(</span><span class=s>&#34;/profile&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=nf>profile</span><span class=p>(</span><span class=n>HttpSession</span><span class=w> </span><span class=n>session</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// Works on any server - data from Redis</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>String</span><span class=w> </span><span class=n>username</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>(</span><span class=n>String</span><span class=p>)</span><span class=w> </span><span class=n>session</span><span class=p>.</span><span class=na>getAttribute</span><span class=p>(</span><span class=s>&#34;username&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=s>&#34;Welcome &#34;</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>username</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span></span></span></code></pre></div></div><h2 id=auto-scaling>Auto Scaling</h2><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>                 Time
+    ↑ CPU/Memory/Requests
+    │
+30% │                           ┌─────────
+    │                           │
+20% │    ┌────────────────┐     │
+    │    │                │     │
+10% │────┘                └─────┴──────
+    └──────────────────────────────────→
+
+During traffic spike:
+├─ CPU jumps to 30%
+├─ Load Balancer triggers: &#34;Add 2 more servers&#34;
+├─ New servers added to pool
+└─ CPU drops back to 20%</code></pre></div><p><strong>AWS Auto Scaling Config:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Target Group: web-servers
+├─ Min servers: 2
+├─ Max servers: 10
+├─ Desired: 3
+└─ Scaling Policy:
+    ├─ Add server if CPU &gt; 70% for 2 minutes
+    └─ Remove server if CPU &lt; 20% for 5 minutes</code></pre></div><h2 id=database-scaling>Database Scaling</h2><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Single Database:
+┌──────────────────────────────┐
+│    Web Servers (3)           │
+└──────────┬───────────────────┘
+           │ All write to same DB
+           ▼
+     ┌───────────────┐
+     │   Database    │ ← Bottleneck!
+     │ (Single point)│
+     └───────────────┘</code></pre></div><h3 id=solution-1-read-replicas>Solution 1: Read Replicas</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Write requests
+    │
+    ▼
+┌─────────────┐
+│Primary DB   │──┐
+└─────────────┘  │ Replicate
+                 │
+            ┌────┴────────┬────────────┐
+            ▼             ▼            ▼
+      ┌────────────┐ ┌──────────┐ ┌──────────┐
+      │ Replica 1  │ │Replica 2 │ │Replica 3 │
+      │(Read-only) │ │ (Read)   │ │ (Read)   │
+      └────────────┘ └──────────┘ └──────────┘
+
+Application:
+├─ Write queries → Primary DB
+└─ Read queries → Any replica</code></pre></div><p><strong>Connection Pool:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-java"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// Write operations</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>HikariDataSource</span><span class=w> </span><span class=n>writeDS</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>HikariDataSource</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>writeDS</span><span class=p>.</span><span class=na>setJdbcUrl</span><span class=p>(</span><span class=s>&#34;jdbc:mysql://primary-db:3306/mydb&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// Read operations</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>HikariDataSource</span><span class=w> </span><span class=n>readDS</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>HikariDataSource</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>readDS</span><span class=p>.</span><span class=na>setJdbcUrl</span><span class=p>(</span><span class=s>&#34;jdbc:mysql://replica-1:3306/mydb&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// Usage</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>try</span><span class=w> </span><span class=p>(</span><span class=n>Connection</span><span class=w> </span><span class=n>write</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>writeDS</span><span class=p>.</span><span class=na>getConnection</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Write to primary</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>write</span><span class=p>.</span><span class=na>createStatement</span><span class=p>().</span><span class=na>execute</span><span class=p>(</span><span class=s>&#34;INSERT INTO users VALUES...&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>try</span><span class=w> </span><span class=p>(</span><span class=n>Connection</span><span class=w> </span><span class=n>read</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>readDS</span><span class=p>.</span><span class=na>getConnection</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// Read from replica</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>ResultSet</span><span class=w> </span><span class=n>rs</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>read</span><span class=p>.</span><span class=na>createStatement</span><span class=p>().</span><span class=na>executeQuery</span><span class=p>(</span><span class=s>&#34;SELECT * FROM users&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span></span></span></code></pre></div></div><h3 id=solution-2-database-sharding>Solution 2: Database Sharding</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>All users
+│
+├─ User ID 1-1000000
+│  └─ Shard 1 (Database 1)
+│
+├─ User ID 1000001-2000000
+│  └─ Shard 2 (Database 2)
+│
+└─ User ID 2000001-3000000
+   └─ Shard 3 (Database 3)
+
+Query for User 5000:
+└─ Hash(5000) % 3 = 1 → Shard 1</code></pre></div><p><strong>Implementation:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-java"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>ShardingService</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>NUM_SHARDS</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>3</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>List</span><span class=o>&lt;</span><span class=n>DataSource</span><span class=o>&gt;</span><span class=w> </span><span class=n>shards</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>DataSource</span><span class=w> </span><span class=nf>getShardForUser</span><span class=p>(</span><span class=kt>int</span><span class=w> </span><span class=n>userId</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kt>int</span><span class=w> </span><span class=n>shardId</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>userId</span><span class=w> </span><span class=o>%</span><span class=w> </span><span class=n>NUM_SHARDS</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>shards</span><span class=p>.</span><span class=na>get</span><span class=p>(</span><span class=n>shardId</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>User</span><span class=w> </span><span class=nf>getUserById</span><span class=p>(</span><span class=kt>int</span><span class=w> </span><span class=n>userId</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>DataSource</span><span class=w> </span><span class=n>ds</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>getShardForUser</span><span class=p>(</span><span class=n>userId</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>try</span><span class=w> </span><span class=p>(</span><span class=n>Connection</span><span class=w> </span><span class=n>conn</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>ds</span><span class=p>.</span><span class=na>getConnection</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>String</span><span class=w> </span><span class=n>sql</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;SELECT * FROM users WHERE id = ?&#34;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>PreparedStatement</span><span class=w> </span><span class=n>stmt</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>conn</span><span class=p>.</span><span class=na>prepareStatement</span><span class=p>(</span><span class=n>sql</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>stmt</span><span class=p>.</span><span class=na>setInt</span><span class=p>(</span><span class=n>1</span><span class=p>,</span><span class=w> </span><span class=n>userId</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>ResultSet</span><span class=w> </span><span class=n>rs</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>stmt</span><span class=p>.</span><span class=na>executeQuery</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// Parse result</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span></span></span></code></pre></div></div><h2 id=caching-layer>Caching Layer</h2><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Without Cache:
+Request → Server → Database → 500ms response
+
+With Cache:
+Request → Cache (Redis) → 5ms response
+If miss → Database → Update cache → 500ms
+
+Request for popular product:
+1st request: Cache miss → 500ms
+2-1000th request: Cache hit → 5ms</code></pre></div><p><strong>Implementation:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-java"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@RestController</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@RequestMapping</span><span class=p>(</span><span class=s>&#34;/products&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>ProductController</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Autowired</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>ProductService</span><span class=w> </span><span class=n>service</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Autowired</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>RedisTemplate</span><span class=o>&lt;</span><span class=n>String</span><span class=p>,</span><span class=w> </span><span class=n>Product</span><span class=o>&gt;</span><span class=w> </span><span class=n>redis</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@GetMapping</span><span class=p>(</span><span class=s>&#34;/{id}&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>Product</span><span class=w> </span><span class=nf>getProduct</span><span class=p>(</span><span class=nd>@PathVariable</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>id</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// Check cache first</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>String</span><span class=w> </span><span class=n>key</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;product:&#34;</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>id</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>Product</span><span class=w> </span><span class=n>cached</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>redis</span><span class=p>.</span><span class=na>opsForValue</span><span class=p>().</span><span class=na>get</span><span class=p>(</span><span class=n>key</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>cached</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>null</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>return</span><span class=w> </span><span class=n>cached</span><span class=p>;</span><span class=w> </span><span class=c1>// 5ms</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// Cache miss - fetch from DB</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>Product</span><span class=w> </span><span class=n>product</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>service</span><span class=p>.</span><span class=na>findById</span><span class=p>(</span><span class=n>id</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// Store in cache for 1 hour</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>redis</span><span class=p>.</span><span class=na>opsForValue</span><span class=p>().</span><span class=na>set</span><span class=p>(</span><span class=n>key</span><span class=p>,</span><span class=w> </span><span class=n>product</span><span class=p>,</span><span class=w> </span><span class=n>Duration</span><span class=p>.</span><span class=na>ofHours</span><span class=p>(</span><span class=n>1</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>product</span><span class=p>;</span><span class=w> </span><span class=c1>// 500ms on first request</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span></span></span></code></pre></div></div><h2 id=monitoring--observability>Monitoring & Observability</h2><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>┌──────────────┐
+│Application  │──┐
+└──────────────┘  │
+                  │ Metrics
+┌──────────────┐  │
+│Load Balancer │──┤
+└──────────────┘  │
+                  ▼
+            ┌─────────────┐
+            │ Prometheus  │ (Metrics collector)
+            └──────┬──────┘
+                   │
+                ┌──┴──┐
+                ▼     ▼
+            Grafana Alerting
+            (Dashboards) (PagerDuty)</code></pre></div><p><strong>Metrics to Monitor:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>├─ Response Time (p50, p95, p99)
+├─ Error Rate
+├─ CPU/Memory usage per server
+├─ Active connections
+├─ Cache hit rate
+├─ Database connections
+└─ Network bandwidth</code></pre></div><h2 id=kết-luận>Kết luận</h2><p>Load balancing là essential cho production systems:</p><p>✅ Handle millions of requests<br>✅ Automatic failover<br>✅ Zero downtime deployments<br>✅ Easy to scale</p><p><strong>Typical Architecture:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+<span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
+<span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Users
+  ↓
+CDN (Cache static assets)
+  ↓
+Load Balancer (Nginx)
+  ↓
+App Servers (Horizontal scaling)
+  ↓
+Session Store (Redis)
+  ↓
+Cache Layer (Redis)
+  ↓
+Database (Primary + Replicas)
+  ↓
+Monitoring (Prometheus + Grafana)</code></pre></div><p>Hệ thống scalable không phải xây một lần, mà là iterative process - start simple, monitor, scale khi cần!</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2025-12-23</span></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/index.md target=_blank>Read Markdown</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on X" data-sharer=x data-url=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ data-title="Load Balancing & Scalability — Mở rộng Ứng dụng" data-hashtags=scalability,load-balancing,architecture><i class="fab fa-x-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Threads" data-sharer=threads data-url=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ data-title="Load Balancing & Scalability — Mở rộng Ứng dụng"><i class="fab fa-threads fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ data-hashtag=scalability><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ data-title="Load Balancing & Scalability — Mở rộng Ứng dụng"><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ data-title="Load Balancing & Scalability — Mở rộng Ứng dụng"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@15.14.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ data-title="Load Balancing & Scalability — Mở rộng Ứng dụng"><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Diaspora" data-sharer=diaspora data-url=https://yourusername.github.io/my-personal-blog/posts/load-balancing-scalability-m%E1%BB%9F-r%E1%BB%99ng-%E1%BB%A9ng-d%E1%BB%A5ng/ data-title="Load Balancing & Scalability — Mở rộng Ứng dụng" data-description><i class="fab fa-diaspora fa-fw" aria-hidden=true></i></a><a href="https://t.me/share/url?url=https%3a%2f%2fyourusername.github.io%2fmy-personal-blog%2fposts%2fload-balancing-scalability-m%25E1%25BB%259F-r%25E1%25BB%2599ng-%25E1%25BB%25A9ng-d%25E1%25BB%25A5ng%2f&amp;text=Load%20Balancing%20%26%20Scalability%20%e2%80%94%20M%e1%bb%9f%20r%e1%bb%99ng%20%e1%bb%a8ng%20d%e1%bb%a5ng" target=_blank title="Share on Telegram"><i class="fab fa-telegram fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-nav><a href=/my-personal-blog/posts/network-security-basics-b%E1%BA%A3o-v%E1%BB%87-m%E1%BA%A1ng-c%E1%BB%A7a-b%E1%BA%A1n/ class=prev rel=prev title="Network Security Basics — Bảo vệ Mạng của Bạn"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Network Security Basics — Bảo vệ Mạng của Bạn</a>
+<a href=/my-personal-blog/posts/proxy-servers-network-intermediaries-trung-gian-m%E1%BA%A1ng/ class=next rel=next title="Proxy Servers & Network Intermediaries — Trung gian Mạng">Proxy Servers & Network Intermediaries — Trung gian Mạng<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.135.0">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.3.1-DEV"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2019 - 2025</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/my-personal-blog/ target=_blank>xxxx</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i></a></div><div id=fixed-buttons-hidden><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=/my-personal-blog/lib/valine/valine.min.css><script src=https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js></script><script src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js></script><script>window.config={comment:{valine:{appId:"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI",appKey:"WBmoGyJtbqUswvfLh6L8iEBr",avatar:"mp",el:"#valine",emojiCDN:"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/",emojiMaps:{100:"1f4af.png",alien:"1f47d.png",anger:"1f4a2.png",angry:"1f620.png",anguished:"1f627.png",astonished:"1f632.png",black_heart:"1f5a4.png",blue_heart:"1f499.png",blush:"1f60a.png",bomb:"1f4a3.png",boom:"1f4a5.png",broken_heart:"1f494.png",brown_heart:"1f90e.png",clown_face:"1f921.png",cold_face:"1f976.png",cold_sweat:"1f630.png",confounded:"1f616.png",confused:"1f615.png",cry:"1f622.png",crying_cat_face:"1f63f.png",cupid:"1f498.png",dash:"1f4a8.png",disappointed:"1f61e.png",disappointed_relieved:"1f625.png",dizzy:"1f4ab.png",dizzy_face:"1f635.png",drooling_face:"1f924.png",exploding_head:"1f92f.png",expressionless:"1f611.png",face_vomiting:"1f92e.png",face_with_cowboy_hat:"1f920.png",face_with_hand_over_mouth:"1f92d.png",face_with_head_bandage:"1f915.png",face_with_monocle:"1f9d0.png",face_with_raised_eyebrow:"1f928.png",face_with_rolling_eyes:"1f644.png",face_with_symbols_on_mouth:"1f92c.png",face_with_thermometer:"1f912.png",fearful:"1f628.png",flushed:"1f633.png",frowning:"1f626.png",ghost:"1f47b.png",gift_heart:"1f49d.png",green_heart:"1f49a.png",grimacing:"1f62c.png",grin:"1f601.png",grinning:"1f600.png",hankey:"1f4a9.png",hear_no_evil:"1f649.png",heart:"2764-fe0f.png",heart_decoration:"1f49f.png",heart_eyes:"1f60d.png",heart_eyes_cat:"1f63b.png",heartbeat:"1f493.png",heartpulse:"1f497.png",heavy_heart_exclamation_mark_ornament:"2763-fe0f.png",hole:"1f573-fe0f.png",hot_face:"1f975.png",hugging_face:"1f917.png",hushed:"1f62f.png",imp:"1f47f.png",innocent:"1f607.png",japanese_goblin:"1f47a.png",japanese_ogre:"1f479.png",joy:"1f602.png",joy_cat:"1f639.png",kiss:"1f48b.png",kissing:"1f617.png",kissing_cat:"1f63d.png",kissing_closed_eyes:"1f61a.png",kissing_heart:"1f618.png",kissing_smiling_eyes:"1f619.png",laughing:"1f606.png",left_speech_bubble:"1f5e8-fe0f.png",love_letter:"1f48c.png",lying_face:"1f925.png",mask:"1f637.png",money_mouth_face:"1f911.png",nauseated_face:"1f922.png",nerd_face:"1f913.png",neutral_face:"1f610.png",no_mouth:"1f636.png",open_mouth:"1f62e.png",orange_heart:"1f9e1.png",partying_face:"1f973.png",pensive:"1f614.png",persevere:"1f623.png",pleading_face:"1f97a.png",pouting_cat:"1f63e.png",purple_heart:"1f49c.png",rage:"1f621.png",relaxed:"263a-fe0f.png",relieved:"1f60c.png",revolving_hearts:"1f49e.png",right_anger_bubble:"1f5ef-fe0f.png",robot_face:"1f916.png",rolling_on_the_floor_laughing:"1f923.png",scream:"1f631.png",scream_cat:"1f640.png",see_no_evil:"1f648.png",shushing_face:"1f92b.png",skull:"1f480.png",skull_and_crossbones:"2620-fe0f.png",sleeping:"1f634.png",sleepy:"1f62a.png",slightly_frowning_face:"1f641.png",slightly_smiling_face:"1f642.png",smile:"1f604.png",smile_cat:"1f638.png",smiley:"1f603.png",smiley_cat:"1f63a.png",smiling_face_with_3_hearts:"1f970.png",smiling_imp:"1f608.png",smirk:"1f60f.png",smirk_cat:"1f63c.png",sneezing_face:"1f927.png",sob:"1f62d.png",space_invader:"1f47e.png",sparkling_heart:"1f496.png",speak_no_evil:"1f64a.png",speech_balloon:"1f4ac.png","star-struck":"1f929.png",stuck_out_tongue:"1f61b.png",stuck_out_tongue_closed_eyes:"1f61d.png",stuck_out_tongue_winking_eye:"1f61c.png",sunglasses:"1f60e.png",sweat:"1f613.png",sweat_drops:"1f4a6.png",sweat_smile:"1f605.png",thinking_face:"1f914.png",thought_balloon:"1f4ad.png",tired_face:"1f62b.png",triumph:"1f624.png",two_hearts:"1f495.png",unamused:"1f612.png",upside_down_face:"1f643.png",weary:"1f629.png",white_frowning_face:"2639-fe0f.png",white_heart:"1f90d.png",wink:"1f609.png",woozy_face:"1f974.png",worried:"1f61f.png",yawning_face:"1f971.png",yellow_heart:"1f49b.png",yum:"1f60b.png",zany_face:"1f92a.png",zipper_mouth_face:"1f910.png",zzz:"1f4a4.png"},enableQQ:!1,highlight:!0,lang:"en",pageSize:10,placeholder:"Your comment ...",recordIP:!0,serverURLs:"https://valine.hugoloveit.com",visitor:!0}},search:{highlightTag:"em",lunrIndexURL:"/my-personal-blog/index.json",maxResultLength:10,noResultsFound:"No results found",snippetLength:50,type:"lunr"}}</script><script src=/my-personal-blog/js/theme.min.js></script></body></html>

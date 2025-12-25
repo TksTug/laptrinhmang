@@ -1,0 +1,28 @@
+/* Custom CSS for minimalistic design */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: #fff;
+}
+
+.post-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  color: #007acc;
+}
+
+code {
+  background: #f4f4f4;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Hide unnecessary elements for minimalism */
+.comments, .related-posts {
+  display: none;
+}
