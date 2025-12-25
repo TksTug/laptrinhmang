@@ -33,7 +33,7 @@ Server → Overwhelmed → Can&#39;t serve users</code></pre></div><p><strong>V�
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Attacker gửi 1,000,000 requests/second
 Server chỉ có thể xử lý 10,000 requests/second
-→ Legitimate users không thể truy cập</code></pre></div><p><strong>Bảo vệ:</strong></p><ul><li>Rate limiting</li><li>Traffic filtering</li><li>CDN (CloudFlare, Akamai)</li></ul><h3 id=2-distributed-denial-of-service-ddos>2. Distributed Denial of Service (DDoS)</h3><p>Tấn công từ nhiều machines:</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+→ Legitimate users không thể truy cập</code></pre></div><p><strong>Bảo vệ:</strong></p><ul><li>Rate limiting</li><li>Traffic filtering</li><li>CDN (CloudFlare, Akamai)</li></ul><h3 id=2-distributed-denial-of-service-ddos>2. Distributed Denial of Service (DDoS)</h3><p>Tấn công từ nhiều machines:</p><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>┌─────────────────────────────────────────────┐
 │         Attacker&#39;s Command Server           │
@@ -59,7 +59,7 @@ Server chỉ có thể xử lý 10,000 requests/second
          (Listens and modifies)</code></pre></div><p><strong>Ví dụ - Unencrypted Wifi:</strong></p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Client: Send password: 12345 (plain text)
-Attacker on same WiFi: Captures password!</code></pre></div><p><strong>Bảo vệ:</strong> HTTPS/TLS encryption</p><h3 id=4-sql-injection>4. SQL Injection</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+Attacker on same WiFi: Captures password!</code></pre></div><p><strong>Bảo vệ:</strong> HTTPS/TLS encryption</p><h3 id=4-sql-injection>4. SQL Injection</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Normal query:
 SELECT * FROM users WHERE username = &#39;john&#39;
@@ -93,7 +93,7 @@ Encrypted: &#34;K7#@!$Q%^&amp;&#34;
     ↓
 Decrypt with same Key: &#34;password123&#34;
     ↓
-Original Data: &#34;Secret Message&#34;</code></pre></div><p><strong>Fast nhưng có vấn đề:</strong> Làm sao chia sẻ key an toàn?</p><p><strong>Algorithms:</strong> AES, DES, Blowfish</p><h3 id=asymmetric-encryption>Asymmetric Encryption</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+Original Data: &#34;Secret Message&#34;</code></pre></div><p><strong>Fast nhưng có vấn đề:</strong> Làm sao chia sẻ key an toàn?</p><p><strong>Algorithms:</strong> AES, DES, Blowfish</p><h3 id=asymmetric-encryption>Asymmetric Encryption</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Người A có: Public Key (công khai), Private Key (bí mật)
 
@@ -106,7 +106,7 @@ Encrypted Secret (bất kỳ ai cũng có thể gửi)
   ↓
 Người A Decrypt với Private Key (chỉ A biết)
   ↓
-Secret (an toàn!)</code></pre></div><p><strong>Ưu điểm:</strong> Không cần chia sẻ key<br><strong>Nhược điểm:</strong> Slow hơn symmetric</p><p><strong>Algorithms:</strong> RSA, ECC</p><h2 id=tlsssl-encryption>TLS/SSL Encryption</h2><p>HTTPS sử dụng TLS (Transport Layer Security):</p><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+Secret (an toàn!)</code></pre></div><p><strong>Ưu điểm:</strong> Không cần chia sẻ key<br><strong>Nhược điểm:</strong> Slow hơn symmetric</p><p><strong>Algorithms:</strong> RSA, ECC</p><h2 id=tlsssl-encryption>TLS/SSL Encryption</h2><p>HTTPS sử dụng TLS (Transport Layer Security):</p><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>1. Client → Server: Hello (supported algorithms)
 
@@ -122,7 +122,7 @@ Secret (an toàn!)</code></pre></div><p><strong>Ưu điểm:</strong> Không c�
    - Decrypt with private key
    - Now both have shared key
 
-5. All data now encrypted with shared key</code></pre></div><h2 id=firewall>Firewall</h2><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+5. All data now encrypted with shared key</code></pre></div><h2 id=firewall>Firewall</h2><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>┌─────────────────────────────────────────────┐
 │            Internet                         │
@@ -144,7 +144,7 @@ Secret (an toàn!)</code></pre></div><p><strong>Ưu điểm:</strong> Không c�
   ↓
 Enter password
   ↓
-If correct → Access</code></pre></div><p><strong>Problem:</strong> Password bị crack</p><h3 id=multi-factor-authentication-mfa>Multi-Factor Authentication (MFA)</h3><div class="code-block code-line-numbers open" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
+If correct → Access</code></pre></div><p><strong>Problem:</strong> Password bị crack</p><h3 id=multi-factor-authentication-mfa>Multi-Factor Authentication (MFA)</h3><div class="code-block code-line-numbers" style="counter-reset:code-block 0"><div class="code-header language-"><span class=code-title><i class="arrow fas fa-angle-right fa-fw" aria-hidden=true></i></span>
 <span class=ellipses><i class="fas fa-ellipsis-h fa-fw" aria-hidden=true></i></span>
 <span class=copy title="Copy to clipboard"><i class="far fa-copy fa-fw" aria-hidden=true></i></span></div><pre tabindex=0><code>Login
   ↓
