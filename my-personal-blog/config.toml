@@ -41,6 +41,14 @@ enableEmoji = true
 # 忽略一些构建错误
 ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
 
+# publish directory
+# 发布目录
+publishDir = "public"
+
+# ignore files - prevent Jekyll processing
+# 忽略文件 - 防止 Jekyll 处理
+ignoreFiles = ["\\.nojekyll"]
+
 # Pagination config
 # 分页配置
 [pagination]
