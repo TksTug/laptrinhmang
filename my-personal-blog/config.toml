@@ -750,8 +750,8 @@ ignoreFiles = ["\\.nojekyll"]
 [permalinks]
   # posts = ":year/:month/:filename"
   # Place posts under the /posts/ section so the posts listing shows them
-  # Use :contentbasename so Hugo maps files in content/posts/ automatically
-  posts = "posts/:contentbasename"
+  # Use :slug so Hugo maps files in content/posts/ automatically
+  posts = "posts/:slug"
 
 # Privacy config (https://gohugo.io/configuration/privacy/)
 # 隐私信息配置 (https://gohugo.io/configuration/privacy/)
