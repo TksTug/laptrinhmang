@@ -17,7 +17,6 @@
 
 Điểm GPA: 2.9/4.0 | Chuyên Ngành Học Liên Quan: Máy học ứng dụng
 
-
 ## 💡 KỸ NĂNG
 
 - Quản Trị Mạng
