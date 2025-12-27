@@ -1,0 +1,65 @@
+{{- /* Shortcode để tự động hiển thị tất cả ảnh chứng chỉ và PDF trong folder */ -}}
+{{- $certDir := "certificates/images/" -}}
+{{- $certPath := path.Join "static" $certDir -}}
+{{- $files := readDir $certPath -}}
+{{- $imageExts := slice "jpg" "jpeg" "png" "JPG" "JPEG" "PNG" -}}
+{{- $pdfExts := slice "pdf" "PDF" -}}
+{{- $certFiles := slice -}}
+{{- range $files -}}
+  {{- $ext := strings.TrimPrefix "." (path.Ext .Name) -}}
+  {{- if or (in $imageExts $ext) (in $pdfExts $ext) -}}
+    {{- $certFiles = $certFiles | append . -}}
+  {{- end -}}
+{{- end -}}
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+  {{- if $certFiles -}}
+    {{- range $certFiles -}}
+      {{- $filePath := print "/" $certDir .Name -}}
+      {{- $fileName := strings.TrimSuffix (path.Ext .Name) .Name -}}
+      {{- $ext := strings.TrimPrefix "." (path.Ext .Name) -}}
+      {{- $isPDF := in $pdfExts $ext -}}
+      <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px; transition: transform 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <a href="{{ $filePath }}" target="_blank" style="text-decoration: none; display: block;">
+          <div style="margin-bottom: 15px; background: white; border-radius: 5px; padding: 10px; overflow: hidden; min-height: 280px; max-height: 280px; display: flex; align-items: center; justify-content: center; position: relative;">
+            {{- if $isPDF -}}
+              {{- /* Hiển thị card PDF đẹp với icon */ -}}
+              <div style="flex-direction: column; align-items: center; justify-content: center; font-size: 80px; color: white; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 5px; cursor: pointer; transition: transform 0.3s ease; display: flex;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="font-size: 80px; margin-bottom: 15px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">📄</div>
+                <p style="font-size: 20px; color: white; margin: 0; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">PDF Chứng Chỉ</p>
+                <p style="font-size: 14px; color: rgba(255,255,255,0.95); margin-top: 8px;">Nhấn để xem PDF</p>
+              </div>
+            {{- else -}}
+              {{- /* Hiển thị ảnh */ -}}
+              <img src="{{ $filePath }}" alt="{{ $fileName }}" style="width: 100%; height: 100%; max-width: 100%; max-height: 260px; object-fit: contain; border-radius: 5px; cursor: pointer; display: block !important; margin: 0 auto; background: transparent; position: relative; z-index: 1;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" onload="this.style.opacity='1';">
+              {{- /* Fallback nếu ảnh không load được */ -}}
+              <div style="display: none; flex-direction: column; align-items: center; justify-content: center; font-size: 64px; color: #3498db; position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+                📄
+                <p style="font-size: 14px; color: #7f8c8d; margin-top: 15px;">Không thể tải ảnh</p>
+              </div>
+            {{- end -}}
+          </div>
+          <h4 style="margin: 10px 0; color: #2c3e50;">{{ $fileName | humanize | title }}</h4>
+          <p style="color: #3498db; font-size: 14px; margin: 5px 0;">
+            {{- if $isPDF -}}
+              Nhấn để xem/tải PDF
+            {{- else -}}
+              Nhấn ảnh để xem toàn màn hình
+            {{- end -}}
+          </p>
+        </a>
+      </div>
+    {{- end -}}
+  {{- else -}}
+    <div style="text-align: center; padding: 30px; color: #7f8c8d; grid-column: 1 / -1;">
+      <p style="font-size: 16px;">📁 Chưa có ảnh chứng chỉ nào trong folder.</p>
+      <p style="font-size: 14px; margin-top: 10px;">Vui lòng đặt ảnh hoặc PDF vào folder: <code>static/certificates/images/</code></p>
+    </div>
+  {{- end -}}
+</div>
+
+<p style="margin-top: 20px; color: #7f8c8d; font-size: 14px; text-align: center;">
+  💡 <strong>Lưu ý:</strong> Đặt ảnh (JPG, PNG) hoặc PDF chứng chỉ vào folder <code>static/certificates/images/</code> với <strong>bất kỳ tên nào</strong>. 
+  <strong>Khuyến nghị:</strong> Chụp màn hình PDF thành PNG để hiển thị tốt hơn (xem hướng dẫn trong folder). Hệ thống sẽ tự động hiển thị tất cả file trong folder.
+</p>
+
