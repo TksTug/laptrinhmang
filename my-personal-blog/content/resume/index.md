@@ -20,7 +20,7 @@ lastmod: 2025-12-26
 
 
 Điểm GPA: 2.9/4.0 | Chuyên Ngành Học Liên Quan: Máy học ứng dụng
-
+ạytr
 
 ## 💡 KỸ NĂNG
 
