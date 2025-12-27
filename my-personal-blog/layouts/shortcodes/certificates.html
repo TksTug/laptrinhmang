@@ -15,7 +15,7 @@
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
   {{- if $certFiles -}}
     {{- range $certFiles -}}
-      {{- $filePath := print "/" $certDir .Name -}}
+      {{- $filePath := (print $certDir .Name) | absURL -}}
       {{- $fileName := strings.TrimSuffix (path.Ext .Name) .Name -}}
       {{- $ext := strings.TrimPrefix "." (path.Ext .Name) -}}
       {{- $isPDF := in $pdfExts $ext -}}
